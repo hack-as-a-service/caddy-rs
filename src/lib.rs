@@ -1,6 +1,7 @@
 pub use caddy_types as types;
 
-use reqwest::{Client, Url};
+use reqwest::Client;
+pub use reqwest::Url;
 use serde::{de::DeserializeOwned, ser::Serialize};
 use thiserror::Error;
 
@@ -48,7 +49,10 @@ impl CaddyClient {
 	pub async fn get_config<Q: DeserializeOwned>(&self, path: &[&str]) -> Result<Q> {
 		Ok(self
 			.client
-			.get(joining_path(&self.api_base, path))
+			.get(joining_path(
+				&joining_path(&self.api_base, &["config"]),
+				path,
+			))
 			.send()
 			.await?
 			.error_for_status()?
@@ -60,7 +64,10 @@ impl CaddyClient {
 	pub async fn set_config<Q: Serialize>(&self, path: &[&str], config: &Q) -> Result<()> {
 		let _ = self
 			.client
-			.post(joining_path(&self.api_base, path))
+			.post(joining_path(
+				&joining_path(&self.api_base, &["config"]),
+				path,
+			))
 			.json(config)
 			.send()
 			.await?
@@ -72,7 +79,10 @@ impl CaddyClient {
 	pub async fn put_config<Q: Serialize>(&self, path: &[&str], config: &Q) -> Result<()> {
 		let _ = self
 			.client
-			.put(joining_path(&self.api_base, path))
+			.put(joining_path(
+				&joining_path(&self.api_base, &["config"]),
+				path,
+			))
 			.json(config)
 			.send()
 			.await?
@@ -84,7 +94,10 @@ impl CaddyClient {
 	pub async fn delete_config(&self, path: &[&str]) -> Result<()> {
 		let _ = self
 			.client
-			.delete(joining_path(&self.api_base, path))
+			.delete(joining_path(
+				&joining_path(&self.api_base, &["config"]),
+				path,
+			))
 			.send()
 			.await?
 			.error_for_status()?;
