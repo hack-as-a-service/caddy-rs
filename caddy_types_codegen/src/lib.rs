@@ -367,7 +367,7 @@ fn mk_struct_def(
 	(
 		quote! {
 			#doc
-			#[derive(Debug, ::serde::Serialize, ::serde::Deserialize)]
+			#[derive(Debug, Default, ::serde::Serialize, ::serde::Deserialize)]
 			#[serde(rename_all = "snake_case")]
 			pub struct #ty_name_lit #block
 		},
