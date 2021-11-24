@@ -145,3 +145,10 @@ impl<T> From<T> for Identified<T> {
 		Self { id: None, value }
 	}
 }
+
+impl<T> std::ops::Deref for Identified<T> {
+	type Target = T;
+	fn deref(&self) -> &Self::Target {
+		&self.value
+	}
+}
