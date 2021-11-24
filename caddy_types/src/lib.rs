@@ -1,3 +1,7 @@
+//! Caddy's types, automatically generated from the JSON docs.
+//! The docs for each item is copied from the JSON, so there may be inaccuracies.
+//! Not all modules are included; only the ones that come with Caddy (and make sense to type) are included.
+
 // HACK: the "" namespace is renamed to "apps"
 caddy_types_codegen::caddy_types!("json/root.json" => {
 	"apps" => (module_map) {
@@ -125,3 +129,19 @@ caddy_types_codegen::caddy_types!("json/root.json" => {
 		sni => "json/tls.handshake_match/sni.json"
 	}
 });
+
+/// Support for [Caddy's @id field](https://caddyserver.com/docs/api#using-id-in-json).
+#[derive(serde::Serialize, serde::Deserialize)]
+pub struct Identified<T> {
+	#[serde(rename = "@id")]
+	#[serde(skip_serializing_if = "Option::is_none")]
+	pub id: Option<String>,
+	#[serde(flatten)]
+	pub value: T,
+}
+
+impl<T> From<T> for Identified<T> {
+	fn from(value: T) -> Self {
+		Self { id: None, value }
+	}
+}

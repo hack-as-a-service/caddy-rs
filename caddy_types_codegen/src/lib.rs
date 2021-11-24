@@ -250,7 +250,10 @@ fn mk_struct_block(
 			// 	aux.push(field_def);
 			// }
 			// let crate_quote = quote! { crate };
-			let is_boxed = if matches!(&field.value.value, Struct { .. } | Module { .. } | ModuleMap { .. }) {
+			let is_boxed = if matches!(
+				&field.value.value,
+				Struct { .. } | Module { .. } | ModuleMap { .. }
+			) {
 				let ty_name1 = mk_type_name(&config.value);
 				let ty_name2 = mk_type_name(&field.value.value);
 				// eprintln!("{} {}", ty_name1, ty_name2);
@@ -323,7 +326,7 @@ fn mk_struct_block(
 						#field_docs
 						#field_attrs
 						#[serde(skip_serializing_if = "Option::is_none")]
-						pub #field_names: ::std::option::Option<#field_tys>
+						pub #field_names: ::std::option::Option<crate::Identified<#field_tys>>
 					),*
 				}
 			},
