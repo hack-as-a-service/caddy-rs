@@ -1,0 +1,88 @@
+{
+	"type": "struct",
+	"type_name": "github.com/caddyserver/caddy/v2/caddyconfig.HTTPLoader",
+	"struct_fields": [
+		{
+			"key": "method",
+			"value": {
+				"type": "string",
+				"doc": "The method for the request. Default: GET"
+			},
+			"doc": "The method for the request. Default: GET"
+		},
+		{
+			"key": "url",
+			"value": {
+				"type": "string",
+				"doc": "The URL of the request."
+			},
+			"doc": "The URL of the request."
+		},
+		{
+			"key": "header",
+			"value": {
+				"type": "map",
+				"type_name": "net/http.Header",
+				"map_keys": {
+					"type": "string"
+				},
+				"elems": {
+					"type": "array",
+					"elems": {
+						"type": "string"
+					},
+					"doc": "HTTP headers to add to the request."
+				},
+				"doc": "A Header represents the key-value pairs in an HTTP header.\n\nThe keys should be in canonical form, as returned by\nCanonicalHeaderKey.\n"
+			},
+			"doc": "HTTP headers to add to the request."
+		},
+		{
+			"key": "timeout",
+			"value": {
+				"type": "int",
+				"type_name": "github.com/caddyserver/caddy/v2.Duration",
+				"doc": "Maximum time allowed for a complete connection and request.\n\n\nDuration can be an integer or a string. An integer is\ninterpreted as nanoseconds. If a string, it is a Go\ntime.Duration value such as `300ms`, `1.5h`, or `2h45m`;\nvalid units are `ns`, `us`/`µs`, `ms`, `s`, `m`, `h`, and `d`."
+			},
+			"doc": "Maximum time allowed for a complete connection and request.\n\n\nDuration can be an integer or a string. An integer is\ninterpreted as nanoseconds. If a string, it is a Go\ntime.Duration value such as `300ms`, `1.5h`, or `2h45m`;\nvalid units are `ns`, `us`/`µs`, `ms`, `s`, `m`, `h`, and `d`."
+		},
+		{
+			"key": "tls",
+			"value": {
+				"type": "struct",
+				"type_name": "github.com/caddyserver/caddy/v2/caddyconfig.HTTPLoaderTLSConfig",
+				"struct_fields": [
+					{
+						"key": "use_server_identity",
+						"value": {
+							"type": "bool"
+						}
+					},
+					{
+						"key": "client_certificate_file",
+						"value": {
+							"type": "string"
+						}
+					},
+					{
+						"key": "client_certificate_key_file",
+						"value": {
+							"type": "string"
+						}
+					},
+					{
+						"key": "root_ca_pem_files",
+						"value": {
+							"type": "array",
+							"elems": {
+								"type": "string"
+							}
+						}
+					}
+				]
+			}
+		}
+	],
+	"doc": "HTTPLoader can load Caddy configs over HTTP(S). It can adapt the config\nbased on the Content-Type header of the HTTP response.\n",
+	"module_inline_key": "module"
+}

@@ -1,0 +1,285 @@
+{
+	"type": "struct",
+	"type_name": "github.com/caddyserver/caddy/v2/modules/caddytls.TLS",
+	"struct_fields": [
+		{
+			"key": "certificates",
+			"value": {
+				"type": "module_map",
+				"type_name": "github.com/caddyserver/caddy/v2.ModuleMap",
+				"doc": "Caches certificates in memory for quick use during\nTLS handshakes. Each key is the name of a certificate\nloader module. All loaded certificates get pooled\ninto the same cache and may be used to complete TLS\nhandshakes for the relevant server names (SNI).\nCertificates loaded manually (anything other than\n\"automate\") are not automatically managed and will\nhave to be refreshed manually before they expire.\n\n\nModuleMap is a map that can contain multiple modules,\nwhere the map key is the module's name. (The namespace\nis usually read from an associated field's struct tag.)\nBecause the module's name is given as the key in a\nmodule map, the name does not have to be given in the\njson.RawMessage.",
+				"module_namespace": "tls.certificates"
+			},
+			"doc": "Caches certificates in memory for quick use during\nTLS handshakes. Each key is the name of a certificate\nloader module. All loaded certificates get pooled\ninto the same cache and may be used to complete TLS\nhandshakes for the relevant server names (SNI).\nCertificates loaded manually (anything other than\n\"automate\") are not automatically managed and will\nhave to be refreshed manually before they expire.\n\n\nModuleMap is a map that can contain multiple modules,\nwhere the map key is the module's name. (The namespace\nis usually read from an associated field's struct tag.)\nBecause the module's name is given as the key in a\nmodule map, the name does not have to be given in the\njson.RawMessage."
+		},
+		{
+			"key": "automation",
+			"value": {
+				"type": "struct",
+				"type_name": "github.com/caddyserver/caddy/v2/modules/caddytls.AutomationConfig",
+				"struct_fields": [
+					{
+						"key": "policies",
+						"value": {
+							"type": "array",
+							"elems": {
+								"type": "struct",
+								"type_name": "github.com/caddyserver/caddy/v2/modules/caddytls.AutomationPolicy",
+								"struct_fields": [
+									{
+										"key": "subjects",
+										"value": {
+											"type": "array",
+											"elems": {
+												"type": "string",
+												"doc": "Which subjects (hostnames or IP addresses) this policy applies to."
+											}
+										},
+										"doc": "Which subjects (hostnames or IP addresses) this policy applies to."
+									},
+									{
+										"key": "issuers",
+										"value": {
+											"type": "array",
+											"elems": {
+												"type": "module",
+												"doc": "The modules that may issue certificates. Default: internal if all\nsubjects do not qualify for public certificates; othewise acme and\nzerossl.",
+												"module_namespace": "tls.issuance",
+												"module_inline_key": "module"
+											}
+										},
+										"doc": "The modules that may issue certificates. Default: internal if all\nsubjects do not qualify for public certificates; othewise acme and\nzerossl."
+									},
+									{
+										"key": "must_staple",
+										"value": {
+											"type": "bool",
+											"doc": "If true, certificates will be requested with MustStaple. Not all\nCAs support this, and there are potentially serious consequences\nof enabling this feature without proper threat modeling."
+										},
+										"doc": "If true, certificates will be requested with MustStaple. Not all\nCAs support this, and there are potentially serious consequences\nof enabling this feature without proper threat modeling."
+									},
+									{
+										"key": "renewal_window_ratio",
+										"value": {
+											"type": "float",
+											"doc": "How long before a certificate's expiration to try renewing it,\nas a function of its total lifetime. As a general and conservative\nrule, it is a good idea to renew a certificate when it has about\n1/3 of its total lifetime remaining. This utilizes the majority\nof the certificate's lifetime while still saving time to\ntroubleshoot problems. However, for extremely short-lived certs,\nyou may wish to increase the ratio to ~1/2."
+										},
+										"doc": "How long before a certificate's expiration to try renewing it,\nas a function of its total lifetime. As a general and conservative\nrule, it is a good idea to renew a certificate when it has about\n1/3 of its total lifetime remaining. This utilizes the majority\nof the certificate's lifetime while still saving time to\ntroubleshoot problems. However, for extremely short-lived certs,\nyou may wish to increase the ratio to ~1/2."
+									},
+									{
+										"key": "key_type",
+										"value": {
+											"type": "string",
+											"doc": "The type of key to generate for certificates.\nSupported values: `ed25519`, `p256`, `p384`, `rsa2048`, `rsa4096`."
+										},
+										"doc": "The type of key to generate for certificates.\nSupported values: `ed25519`, `p256`, `p384`, `rsa2048`, `rsa4096`."
+									},
+									{
+										"key": "storage",
+										"value": {
+											"type": "module",
+											"doc": "Optionally configure a separate storage module associated with this\nmanager, instead of using Caddy's global/default-configured storage.",
+											"module_namespace": "caddy.storage",
+											"module_inline_key": "module"
+										},
+										"doc": "Optionally configure a separate storage module associated with this\nmanager, instead of using Caddy's global/default-configured storage."
+									},
+									{
+										"key": "on_demand",
+										"value": {
+											"type": "bool",
+											"doc": "If true, certificates will be managed \"on demand\"; that is, during\nTLS handshakes or when needed, as opposed to at startup or config\nload."
+										},
+										"doc": "If true, certificates will be managed \"on demand\"; that is, during\nTLS handshakes or when needed, as opposed to at startup or config\nload."
+									},
+									{
+										"key": "disable_ocsp_stapling",
+										"value": {
+											"type": "bool",
+											"doc": "Disables OCSP stapling. Disabling OCSP stapling puts clients at\ngreater risk, reduces their privacy, and usually lowers client\nperformance. It is NOT recommended to disable this unless you\nare able to justify the costs.\nEXPERIMENTAL. Subject to change."
+										},
+										"doc": "Disables OCSP stapling. Disabling OCSP stapling puts clients at\ngreater risk, reduces their privacy, and usually lowers client\nperformance. It is NOT recommended to disable this unless you\nare able to justify the costs.\nEXPERIMENTAL. Subject to change."
+									},
+									{
+										"key": "ocsp_overrides",
+										"value": {
+											"type": "map",
+											"map_keys": {
+												"type": "string"
+											},
+											"elems": {
+												"type": "string",
+												"doc": "Overrides the URLs of OCSP responders embedded in certificates.\nEach key is a OCSP server URL to override, and its value is the\nreplacement. An empty value will disable querying of that server.\nEXPERIMENTAL. Subject to change."
+											}
+										},
+										"doc": "Overrides the URLs of OCSP responders embedded in certificates.\nEach key is a OCSP server URL to override, and its value is the\nreplacement. An empty value will disable querying of that server.\nEXPERIMENTAL. Subject to change."
+									}
+								],
+								"doc": "The list of automation policies. The first policy matching\na certificate or subject name will be applied.\n\n\nAutomationPolicy designates the policy for automating the\nmanagement (obtaining, renewal, and revocation) of managed\nTLS certificates.\n\nAn AutomationPolicy value is not valid until it has been\nprovisioned; use the `AddAutomationPolicy()` method on the\nTLS app to properly provision a new policy."
+							}
+						},
+						"doc": "The list of automation policies. The first policy matching\na certificate or subject name will be applied.\n\n\nAutomationPolicy designates the policy for automating the\nmanagement (obtaining, renewal, and revocation) of managed\nTLS certificates.\n\nAn AutomationPolicy value is not valid until it has been\nprovisioned; use the `AddAutomationPolicy()` method on the\nTLS app to properly provision a new policy."
+					},
+					{
+						"key": "on_demand",
+						"value": {
+							"type": "struct",
+							"type_name": "github.com/caddyserver/caddy/v2/modules/caddytls.OnDemandConfig",
+							"struct_fields": [
+								{
+									"key": "rate_limit",
+									"value": {
+										"type": "struct",
+										"type_name": "github.com/caddyserver/caddy/v2/modules/caddytls.RateLimit",
+										"struct_fields": [
+											{
+												"key": "interval",
+												"value": {
+													"type": "int",
+													"type_name": "github.com/caddyserver/caddy/v2.Duration",
+													"doc": "A duration value. A certificate may be obtained 'burst'\ntimes during this interval.\n\n\nDuration can be an integer or a string. An integer is\ninterpreted as nanoseconds. If a string, it is a Go\ntime.Duration value such as `300ms`, `1.5h`, or `2h45m`;\nvalid units are `ns`, `us`/`µs`, `ms`, `s`, `m`, `h`, and `d`."
+												},
+												"doc": "A duration value. A certificate may be obtained 'burst'\ntimes during this interval.\n\n\nDuration can be an integer or a string. An integer is\ninterpreted as nanoseconds. If a string, it is a Go\ntime.Duration value such as `300ms`, `1.5h`, or `2h45m`;\nvalid units are `ns`, `us`/`µs`, `ms`, `s`, `m`, `h`, and `d`."
+											},
+											{
+												"key": "burst",
+												"value": {
+													"type": "int",
+													"doc": "How many times during an interval a certificate can be obtained."
+												},
+												"doc": "How many times during an interval a certificate can be obtained."
+											}
+										],
+										"doc": "An optional rate limit to throttle the\nissuance of certificates from handshakes.\n\n\nRateLimit specifies an interval with optional burst size."
+									},
+									"doc": "An optional rate limit to throttle the\nissuance of certificates from handshakes.\n\n\nRateLimit specifies an interval with optional burst size."
+								},
+								{
+									"key": "ask",
+									"value": {
+										"type": "string",
+										"doc": "If Caddy needs to obtain or renew a certificate\nduring a TLS handshake, it will perform a quick\nHTTP request to this URL to check if it should be\nallowed to try to get a certificate for the name\nin the \"domain\" query string parameter, like so:\n`?domain=example.com`. The endpoint must return a\n200 OK status if a certificate is allowed;\nanything else will cause it to be denied.\nRedirects are not followed."
+									},
+									"doc": "If Caddy needs to obtain or renew a certificate\nduring a TLS handshake, it will perform a quick\nHTTP request to this URL to check if it should be\nallowed to try to get a certificate for the name\nin the \"domain\" query string parameter, like so:\n`?domain=example.com`. The endpoint must return a\n200 OK status if a certificate is allowed;\nanything else will cause it to be denied.\nRedirects are not followed."
+								}
+							],
+							"doc": "On-Demand TLS defers certificate operations to the\nmoment they are needed, e.g. during a TLS handshake.\nUseful when you don't know all the hostnames at\nconfig-time, or when you are not in control of the\ndomain names you are managing certificates for.\nIn 2015, Caddy became the first web server to\nimplement this experimental technology.\n\nNote that this field does not enable on-demand TLS;\nit only configures it for when it is used. To enable\nit, create an automation policy with `on_demand`.\n\n\nOnDemandConfig configures on-demand TLS, for obtaining\nneeded certificates at handshake-time. Because this\nfeature can easily be abused, you should use this to\nestablish rate limits and/or an internal endpoint that\nCaddy can \"ask\" if it should be allowed to manage\ncertificates for a given hostname."
+						},
+						"doc": "On-Demand TLS defers certificate operations to the\nmoment they are needed, e.g. during a TLS handshake.\nUseful when you don't know all the hostnames at\nconfig-time, or when you are not in control of the\ndomain names you are managing certificates for.\nIn 2015, Caddy became the first web server to\nimplement this experimental technology.\n\nNote that this field does not enable on-demand TLS;\nit only configures it for when it is used. To enable\nit, create an automation policy with `on_demand`.\n\n\nOnDemandConfig configures on-demand TLS, for obtaining\nneeded certificates at handshake-time. Because this\nfeature can easily be abused, you should use this to\nestablish rate limits and/or an internal endpoint that\nCaddy can \"ask\" if it should be allowed to manage\ncertificates for a given hostname."
+					},
+					{
+						"key": "ocsp_interval",
+						"value": {
+							"type": "int",
+							"type_name": "github.com/caddyserver/caddy/v2.Duration",
+							"doc": "Caddy staples OCSP (and caches the response) for all\nqualifying certificates by default. This setting\nchanges how often it scans responses for freshness,\nand updates them if they are getting stale. Default: 1h\n\n\nDuration can be an integer or a string. An integer is\ninterpreted as nanoseconds. If a string, it is a Go\ntime.Duration value such as `300ms`, `1.5h`, or `2h45m`;\nvalid units are `ns`, `us`/`µs`, `ms`, `s`, `m`, `h`, and `d`."
+						},
+						"doc": "Caddy staples OCSP (and caches the response) for all\nqualifying certificates by default. This setting\nchanges how often it scans responses for freshness,\nand updates them if they are getting stale. Default: 1h\n\n\nDuration can be an integer or a string. An integer is\ninterpreted as nanoseconds. If a string, it is a Go\ntime.Duration value such as `300ms`, `1.5h`, or `2h45m`;\nvalid units are `ns`, `us`/`µs`, `ms`, `s`, `m`, `h`, and `d`."
+					},
+					{
+						"key": "renew_interval",
+						"value": {
+							"type": "int",
+							"type_name": "github.com/caddyserver/caddy/v2.Duration",
+							"doc": "Every so often, Caddy will scan all loaded, managed\ncertificates for expiration. This setting changes how\nfrequently the scan for expiring certificates is\nperformed. Default: 10m\n\n\nDuration can be an integer or a string. An integer is\ninterpreted as nanoseconds. If a string, it is a Go\ntime.Duration value such as `300ms`, `1.5h`, or `2h45m`;\nvalid units are `ns`, `us`/`µs`, `ms`, `s`, `m`, `h`, and `d`."
+						},
+						"doc": "Every so often, Caddy will scan all loaded, managed\ncertificates for expiration. This setting changes how\nfrequently the scan for expiring certificates is\nperformed. Default: 10m\n\n\nDuration can be an integer or a string. An integer is\ninterpreted as nanoseconds. If a string, it is a Go\ntime.Duration value such as `300ms`, `1.5h`, or `2h45m`;\nvalid units are `ns`, `us`/`µs`, `ms`, `s`, `m`, `h`, and `d`."
+					},
+					{
+						"key": "storage_clean_interval",
+						"value": {
+							"type": "int",
+							"type_name": "github.com/caddyserver/caddy/v2.Duration",
+							"doc": "How often to scan storage units for old or expired\nassets and remove them. These scans exert lots of\nreads (and list operations) on the storage module, so\nchoose a longer interval for large deployments.\nDefault: 24h\n\nStorage will always be cleaned when the process first\nstarts. Then, a new cleaning will be started this\nduration after the previous cleaning started if the\nprevious cleaning finished in less than half the time\nof this interval (otherwise next start will be skipped).\n\n\nDuration can be an integer or a string. An integer is\ninterpreted as nanoseconds. If a string, it is a Go\ntime.Duration value such as `300ms`, `1.5h`, or `2h45m`;\nvalid units are `ns`, `us`/`µs`, `ms`, `s`, `m`, `h`, and `d`."
+						},
+						"doc": "How often to scan storage units for old or expired\nassets and remove them. These scans exert lots of\nreads (and list operations) on the storage module, so\nchoose a longer interval for large deployments.\nDefault: 24h\n\nStorage will always be cleaned when the process first\nstarts. Then, a new cleaning will be started this\nduration after the previous cleaning started if the\nprevious cleaning finished in less than half the time\nof this interval (otherwise next start will be skipped).\n\n\nDuration can be an integer or a string. An integer is\ninterpreted as nanoseconds. If a string, it is a Go\ntime.Duration value such as `300ms`, `1.5h`, or `2h45m`;\nvalid units are `ns`, `us`/`µs`, `ms`, `s`, `m`, `h`, and `d`."
+					}
+				],
+				"doc": "Configures certificate automation.\n\n\nAutomationConfig governs the automated management of TLS certificates."
+			},
+			"doc": "Configures certificate automation.\n\n\nAutomationConfig governs the automated management of TLS certificates."
+		},
+		{
+			"key": "session_tickets",
+			"value": {
+				"type": "struct",
+				"type_name": "github.com/caddyserver/caddy/v2/modules/caddytls.SessionTicketService",
+				"struct_fields": [
+					{
+						"key": "key_source",
+						"value": {
+							"type": "module",
+							"doc": "KeySource is the method by which Caddy produces or obtains\nTLS session ticket keys (STEKs). By default, Caddy generates\nthem internally using a secure pseudorandom source.",
+							"module_namespace": "tls.stek",
+							"module_inline_key": "provider"
+						},
+						"doc": "KeySource is the method by which Caddy produces or obtains\nTLS session ticket keys (STEKs). By default, Caddy generates\nthem internally using a secure pseudorandom source."
+					},
+					{
+						"key": "rotation_interval",
+						"value": {
+							"type": "int",
+							"type_name": "github.com/caddyserver/caddy/v2.Duration",
+							"doc": "How often Caddy rotates STEKs. Default: 12h.\n\n\nDuration can be an integer or a string. An integer is\ninterpreted as nanoseconds. If a string, it is a Go\ntime.Duration value such as `300ms`, `1.5h`, or `2h45m`;\nvalid units are `ns`, `us`/`µs`, `ms`, `s`, `m`, `h`, and `d`."
+						},
+						"doc": "How often Caddy rotates STEKs. Default: 12h.\n\n\nDuration can be an integer or a string. An integer is\ninterpreted as nanoseconds. If a string, it is a Go\ntime.Duration value such as `300ms`, `1.5h`, or `2h45m`;\nvalid units are `ns`, `us`/`µs`, `ms`, `s`, `m`, `h`, and `d`."
+					},
+					{
+						"key": "max_keys",
+						"value": {
+							"type": "int",
+							"doc": "The maximum number of keys to keep in rotation. Default: 4."
+						},
+						"doc": "The maximum number of keys to keep in rotation. Default: 4."
+					},
+					{
+						"key": "disable_rotation",
+						"value": {
+							"type": "bool",
+							"doc": "Disables STEK rotation."
+						},
+						"doc": "Disables STEK rotation."
+					},
+					{
+						"key": "disabled",
+						"value": {
+							"type": "bool",
+							"doc": "Disables TLS session resumption by tickets."
+						},
+						"doc": "Disables TLS session resumption by tickets."
+					}
+				],
+				"doc": "Configures session ticket ephemeral keys (STEKs).\n\n\nSessionTicketService configures and manages TLS session tickets."
+			},
+			"doc": "Configures session ticket ephemeral keys (STEKs).\n\n\nSessionTicketService configures and manages TLS session tickets."
+		},
+		{
+			"key": "cache",
+			"value": {
+				"type": "struct",
+				"type_name": "github.com/caddyserver/caddy/v2/modules/caddytls.CertCacheOptions",
+				"struct_fields": [
+					{
+						"key": "capacity",
+						"value": {
+							"type": "int",
+							"doc": "Maximum number of certificates to allow in the\ncache. If reached, certificates will be randomly\nevicted to make room for new ones. Default: 10,000"
+						},
+						"doc": "Maximum number of certificates to allow in the\ncache. If reached, certificates will be randomly\nevicted to make room for new ones. Default: 10,000"
+					}
+				],
+				"doc": "Configures the in-memory certificate cache.\n\n\nCertCacheOptions configures the certificate cache."
+			},
+			"doc": "Configures the in-memory certificate cache.\n\n\nCertCacheOptions configures the certificate cache."
+		},
+		{
+			"key": "disable_ocsp_stapling",
+			"value": {
+				"type": "bool",
+				"doc": "Disables OCSP stapling for manually-managed certificates only.\nTo configure OCSP stapling for automated certificates, use an\nautomation policy instead.\n\nDisabling OCSP stapling puts clients at greater risk, reduces their\nprivacy, and usually lowers client performance. It is NOT recommended\nto disable this unless you are able to justify the costs.\nEXPERIMENTAL. Subject to change."
+			},
+			"doc": "Disables OCSP stapling for manually-managed certificates only.\nTo configure OCSP stapling for automated certificates, use an\nautomation policy instead.\n\nDisabling OCSP stapling puts clients at greater risk, reduces their\nprivacy, and usually lowers client performance. It is NOT recommended\nto disable this unless you are able to justify the costs.\nEXPERIMENTAL. Subject to change."
+		}
+	],
+	"doc": "TLS provides TLS facilities including certificate\nloading and management, client auth, and more.\n"
+}

@@ -1,0 +1,1 @@
+{"type": "struct", "type_name": "github.com/caddyserver/caddy/v2/modules/caddyhttp/reverseproxy.IPHashSelection", "doc": "IPHashSelection is a policy that selects a host\nbased on hashing the remote IP of the request.\n", "module_inline_key": "policy"}

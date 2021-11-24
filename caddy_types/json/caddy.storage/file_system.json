@@ -1,0 +1,16 @@
+{
+	"type": "struct",
+	"type_name": "github.com/caddyserver/caddy/v2/modules/filestorage.FileStorage",
+	"struct_fields": [
+		{
+			"key": "root",
+			"value": {
+				"type": "string",
+				"doc": "The base path to the folder used for storage."
+			},
+			"doc": "The base path to the folder used for storage."
+		}
+	],
+	"doc": "FileStorage is a certmagic.Storage wrapper for certmagic.FileStorage.\n",
+	"module_inline_key": "module"
+}

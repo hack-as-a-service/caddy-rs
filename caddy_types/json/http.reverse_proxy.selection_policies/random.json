@@ -1,0 +1,1 @@
+{"type": "struct", "type_name": "github.com/caddyserver/caddy/v2/modules/caddyhttp/reverseproxy.RandomSelection", "doc": "RandomSelection is a policy that selects\nan available host at random.\n", "module_inline_key": "policy"}

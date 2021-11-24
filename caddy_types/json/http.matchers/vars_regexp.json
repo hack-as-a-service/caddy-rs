@@ -1,0 +1,31 @@
+{
+	"type": "map",
+	"type_name": "github.com/caddyserver/caddy/v2/modules/caddyhttp.MatchVarsRE",
+	"map_keys": {
+		"type": "string"
+	},
+	"elems": {
+		"type": "struct",
+		"type_name": "github.com/caddyserver/caddy/v2/modules/caddyhttp.MatchRegexp",
+		"struct_fields": [
+			{
+				"key": "name",
+				"value": {
+					"type": "string",
+					"doc": "A unique name for this regular expression. Optional,\nbut useful to prevent overwriting captures from other\nregexp matchers."
+				},
+				"doc": "A unique name for this regular expression. Optional,\nbut useful to prevent overwriting captures from other\nregexp matchers."
+			},
+			{
+				"key": "pattern",
+				"value": {
+					"type": "string",
+					"doc": "The regular expression to evaluate, in RE2 syntax,\nwhich is the same general syntax used by Go, Perl,\nand Python. For details, see\n[Go's regexp package](https://golang.org/pkg/regexp/).\nCaptures are accessible via placeholders. Unnamed\ncapture groups are exposed as their numeric, 1-based\nindex, while named capture groups are available by\nthe capture group name."
+				},
+				"doc": "The regular expression to evaluate, in RE2 syntax,\nwhich is the same general syntax used by Go, Perl,\nand Python. For details, see\n[Go's regexp package](https://golang.org/pkg/regexp/).\nCaptures are accessible via placeholders. Unnamed\ncapture groups are exposed as their numeric, 1-based\nindex, while named capture groups are available by\nthe capture group name."
+			}
+		],
+		"doc": "MatchRegexp is an embedable type for matching\nusing regular expressions. It adds placeholders\nto the request's replacer.\n"
+	},
+	"doc": "MatchVarsRE matches the value of the context variables by a given regular expression.\n\nUpon a match, it adds placeholders to the request: `{http.regexp.name.capture_group}`\nwhere `name` is the regular expression's name, and `capture_group` is either\nthe named or positional capture group from the expression itself. If no name\nis given, then the placeholder omits the name: `{http.regexp.capture_group}`\n(potentially leading to collisions).\n"
+}

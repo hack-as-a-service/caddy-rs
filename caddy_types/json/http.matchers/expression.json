@@ -1,0 +1,5 @@
+{
+	"type": "string",
+	"type_name": "github.com/caddyserver/caddy/v2/modules/caddyhttp.MatchExpression",
+	"doc": "MatchExpression matches requests by evaluating a\n[CEL](https://github.com/google/cel-spec) expression.\nThis enables complex logic to be expressed using a comfortable,\nfamiliar syntax. Please refer to\n[the standard definitions of CEL functions and operators](https://github.com/google/cel-spec/blob/master/doc/langdef.md#standard-definitions).\n\nThis matcher's JSON interface is actually a string, not a struct.\nThe generated docs are not correct because this type has custom\nmarshaling logic.\n\nCOMPATIBILITY NOTE: This module is still experimental and is not\nsubject to Caddy's compatibility guarantee.\n"
+}

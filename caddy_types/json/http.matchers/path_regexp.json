@@ -1,0 +1,23 @@
+{
+	"type": "struct",
+	"type_name": "github.com/caddyserver/caddy/v2/modules/caddyhttp.MatchPathRE",
+	"struct_fields": [
+		{
+			"key": "name",
+			"value": {
+				"type": "string",
+				"doc": "A unique name for this regular expression. Optional,\nbut useful to prevent overwriting captures from other\nregexp matchers."
+			},
+			"doc": "A unique name for this regular expression. Optional,\nbut useful to prevent overwriting captures from other\nregexp matchers."
+		},
+		{
+			"key": "pattern",
+			"value": {
+				"type": "string",
+				"doc": "The regular expression to evaluate, in RE2 syntax,\nwhich is the same general syntax used by Go, Perl,\nand Python. For details, see\n[Go's regexp package](https://golang.org/pkg/regexp/).\nCaptures are accessible via placeholders. Unnamed\ncapture groups are exposed as their numeric, 1-based\nindex, while named capture groups are available by\nthe capture group name."
+			},
+			"doc": "The regular expression to evaluate, in RE2 syntax,\nwhich is the same general syntax used by Go, Perl,\nand Python. For details, see\n[Go's regexp package](https://golang.org/pkg/regexp/).\nCaptures are accessible via placeholders. Unnamed\ncapture groups are exposed as their numeric, 1-based\nindex, while named capture groups are available by\nthe capture group name."
+		}
+	],
+	"doc": "MatchPathRE matches requests by a regular expression on the URI's path.\n\nUpon a match, it adds placeholders to the request: `{http.regexp.name.capture_group}`\nwhere `name` is the regular expression's name, and `capture_group` is either\nthe named or positional capture group from the expression itself. If no name\nis given, then the placeholder omits the name: `{http.regexp.capture_group}`\n(potentially leading to collisions).\n"
+}

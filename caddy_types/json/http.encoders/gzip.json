@@ -1,0 +1,1 @@
+{"type": "struct", "type_name": "github.com/caddyserver/caddy/v2/modules/caddyhttp/encode/gzip.Gzip", "struct_fields": [{"key": "level", "value": {"type": "int"}}], "doc": "Gzip can create gzip encoders.\n"}

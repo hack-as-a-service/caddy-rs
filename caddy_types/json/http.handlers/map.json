@@ -1,0 +1,79 @@
+{
+	"type": "struct",
+	"type_name": "github.com/caddyserver/caddy/v2/modules/caddyhttp/map.Handler",
+	"struct_fields": [
+		{
+			"key": "source",
+			"value": {
+				"type": "string",
+				"doc": "Source is the placeholder from which to get the input value."
+			},
+			"doc": "Source is the placeholder from which to get the input value."
+		},
+		{
+			"key": "destinations",
+			"value": {
+				"type": "array",
+				"elems": {
+					"type": "string",
+					"doc": "Destinations are the names of placeholders in which to store the outputs."
+				}
+			},
+			"doc": "Destinations are the names of placeholders in which to store the outputs."
+		},
+		{
+			"key": "mappings",
+			"value": {
+				"type": "array",
+				"elems": {
+					"type": "struct",
+					"type_name": "github.com/caddyserver/caddy/v2/modules/caddyhttp/map.Mapping",
+					"struct_fields": [
+						{
+							"key": "input",
+							"value": {
+								"type": "string",
+								"doc": "The input value to match. Must be distinct from other mappings.\nMutually exclusive to input_regexp."
+							},
+							"doc": "The input value to match. Must be distinct from other mappings.\nMutually exclusive to input_regexp."
+						},
+						{
+							"key": "input_regexp",
+							"value": {
+								"type": "string",
+								"doc": "The input regular expression to match. Mutually exclusive to input."
+							},
+							"doc": "The input regular expression to match. Mutually exclusive to input."
+						},
+						{
+							"key": "outputs",
+							"value": {
+								"type": "array",
+								"elems": {
+									"type": "string",
+									"doc": "Upon a match with the input, each output is positionally correlated\nwith each destination of the parent handler. An output that is null\n(nil) will be treated as if it was not mapped at all."
+								}
+							},
+							"doc": "Upon a match with the input, each output is positionally correlated\nwith each destination of the parent handler. An output that is null\n(nil) will be treated as if it was not mapped at all."
+						}
+					],
+					"doc": "Mappings from source values (inputs) to destination values (outputs).\nThe first matching, non-nil mapping will be applied.\n\n\nMapping describes a mapping from input to outputs."
+				}
+			},
+			"doc": "Mappings from source values (inputs) to destination values (outputs).\nThe first matching, non-nil mapping will be applied.\n\n\nMapping describes a mapping from input to outputs."
+		},
+		{
+			"key": "defaults",
+			"value": {
+				"type": "array",
+				"elems": {
+					"type": "string",
+					"doc": "If no mappings match or if the mapped output is null/nil, the associated\ndefault output will be applied (optional)."
+				}
+			},
+			"doc": "If no mappings match or if the mapped output is null/nil, the associated\ndefault output will be applied (optional)."
+		}
+	],
+	"doc": "Handler implements a middleware that maps inputs to outputs. Specifically, it\ncompares a source value against the map inputs, and for one that matches, it\napplies the output values to each destination. Destinations become placeholder\nnames.\n\nMapped placeholders are not evaluated until they are used, so even for very\nlarge mappings, this handler is quite efficient.\n",
+	"module_inline_key": "handler"
+}

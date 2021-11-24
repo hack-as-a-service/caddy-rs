@@ -1,0 +1,28 @@
+{
+	"type": "struct",
+	"type_name": "github.com/caddyserver/caddy/v2/modules/logging.FilterEncoder",
+	"struct_fields": [
+		{
+			"key": "wrap",
+			"value": {
+				"type": "module",
+				"doc": "The underlying encoder that actually\nencodes the log entries. Required.",
+				"module_namespace": "caddy.logging.encoders",
+				"module_inline_key": "format"
+			},
+			"doc": "The underlying encoder that actually\nencodes the log entries. Required."
+		},
+		{
+			"key": "fields",
+			"value": {
+				"type": "module_map",
+				"doc": "A map of field names to their filters. Note that this\nis not a module map; the keys are field names.\n\nNested fields can be referenced by representing a\nlayer of nesting with `\u003e`. In other words, for an\nobject like `{\"a\":{\"b\":0}}`, the inner field can\nbe referenced as `a\u003eb`.\n\nThe following fields are fundamental to the log and\ncannot be filtered because they are added by the\nunderlying logging library as special cases: ts,\nlevel, logger, and msg.",
+				"module_namespace": "caddy.logging.encoders.filter",
+				"module_inline_key": "filter"
+			},
+			"doc": "A map of field names to their filters. Note that this\nis not a module map; the keys are field names.\n\nNested fields can be referenced by representing a\nlayer of nesting with `\u003e`. In other words, for an\nobject like `{\"a\":{\"b\":0}}`, the inner field can\nbe referenced as `a\u003eb`.\n\nThe following fields are fundamental to the log and\ncannot be filtered because they are added by the\nunderlying logging library as special cases: ts,\nlevel, logger, and msg."
+		}
+	],
+	"doc": "FilterEncoder can filter (manipulate) fields on\nlog entries before they are actually encoded by\nan underlying encoder.\n",
+	"module_inline_key": "format"
+}

@@ -1,0 +1,1 @@
+{"type": "struct", "type_name": "github.com/caddyserver/caddy/v2/modules/caddyhttp/encode/gzip.GzipPrecompressed", "struct_fields": [{"key": "level", "value": {"type": "int"}}], "doc": "GzipPrecompressed provides the file extension for files precompressed with gzip encoding.\n"}

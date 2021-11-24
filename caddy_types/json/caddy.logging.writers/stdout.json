@@ -1,0 +1,6 @@
+{
+	"type": "struct",
+	"type_name": "github.com/caddyserver/caddy/v2.StdoutWriter",
+	"doc": "StdoutWriter writes logs to standard out.\n",
+	"module_inline_key": "output"
+}

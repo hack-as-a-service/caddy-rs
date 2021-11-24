@@ -1,0 +1,1 @@
+{"type": "struct", "type_name": "github.com/caddyserver/caddy/v2/modules/caddyhttp/encode/zstd.Zstd", "doc": "Zstd can create Zstandard encoders.\n"}

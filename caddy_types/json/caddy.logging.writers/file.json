@@ -1,0 +1,64 @@
+{
+	"type": "struct",
+	"type_name": "github.com/caddyserver/caddy/v2/modules/logging.FileWriter",
+	"struct_fields": [
+		{
+			"key": "filename",
+			"value": {
+				"type": "string",
+				"doc": "Filename is the name of the file to write."
+			},
+			"doc": "Filename is the name of the file to write."
+		},
+		{
+			"key": "roll",
+			"value": {
+				"type": "bool",
+				"doc": "Roll toggles log rolling or rotation, which is\nenabled by default."
+			},
+			"doc": "Roll toggles log rolling or rotation, which is\nenabled by default."
+		},
+		{
+			"key": "roll_size_mb",
+			"value": {
+				"type": "int",
+				"doc": "When a log file reaches approximately this size,\nit will be rotated."
+			},
+			"doc": "When a log file reaches approximately this size,\nit will be rotated."
+		},
+		{
+			"key": "roll_gzip",
+			"value": {
+				"type": "bool",
+				"doc": "Whether to compress rolled files. Default: true"
+			},
+			"doc": "Whether to compress rolled files. Default: true"
+		},
+		{
+			"key": "roll_local_time",
+			"value": {
+				"type": "bool",
+				"doc": "Whether to use local timestamps in rolled filenames.\nDefault: false"
+			},
+			"doc": "Whether to use local timestamps in rolled filenames.\nDefault: false"
+		},
+		{
+			"key": "roll_keep",
+			"value": {
+				"type": "int",
+				"doc": "The maximum number of rolled log files to keep.\nDefault: 10"
+			},
+			"doc": "The maximum number of rolled log files to keep.\nDefault: 10"
+		},
+		{
+			"key": "roll_keep_days",
+			"value": {
+				"type": "int",
+				"doc": "How many days to keep rolled log files. Default: 90"
+			},
+			"doc": "How many days to keep rolled log files. Default: 90"
+		}
+	],
+	"doc": "FileWriter can write logs to files. By default, log files\nare rotated (\"rolled\") when they get large, and old log\nfiles get deleted, to ensure that the process does not\nexhaust disk space.\n",
+	"module_inline_key": "output"
+}

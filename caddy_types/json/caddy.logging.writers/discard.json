@@ -1,0 +1,6 @@
+{
+	"type": "struct",
+	"type_name": "github.com/caddyserver/caddy/v2.DiscardWriter",
+	"doc": "DiscardWriter discards all writes.\n",
+	"module_inline_key": "output"
+}

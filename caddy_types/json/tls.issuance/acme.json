@@ -1,0 +1,251 @@
+{
+	"type": "struct",
+	"type_name": "github.com/caddyserver/caddy/v2/modules/caddytls.ACMEIssuer",
+	"struct_fields": [
+		{
+			"key": "ca",
+			"value": {
+				"type": "string",
+				"doc": "The URL to the CA's ACME directory endpoint. Default:\nhttps://acme-v02.api.letsencrypt.org/directory"
+			},
+			"doc": "The URL to the CA's ACME directory endpoint. Default:\nhttps://acme-v02.api.letsencrypt.org/directory"
+		},
+		{
+			"key": "test_ca",
+			"value": {
+				"type": "string",
+				"doc": "The URL to the test CA's ACME directory endpoint.\nThis endpoint is only used during retries if there\nis a failure using the primary CA. Default:\nhttps://acme-staging-v02.api.letsencrypt.org/directory"
+			},
+			"doc": "The URL to the test CA's ACME directory endpoint.\nThis endpoint is only used during retries if there\nis a failure using the primary CA. Default:\nhttps://acme-staging-v02.api.letsencrypt.org/directory"
+		},
+		{
+			"key": "email",
+			"value": {
+				"type": "string",
+				"doc": "Your email address, so the CA can contact you if necessary.\nNot required, but strongly recommended to provide one so\nyou can be reached if there is a problem. Your email is\nnot sent to any Caddy mothership or used for any purpose\nother than ACME transactions."
+			},
+			"doc": "Your email address, so the CA can contact you if necessary.\nNot required, but strongly recommended to provide one so\nyou can be reached if there is a problem. Your email is\nnot sent to any Caddy mothership or used for any purpose\nother than ACME transactions."
+		},
+		{
+			"key": "account_key",
+			"value": {
+				"type": "string",
+				"doc": "If you have an existing account with the ACME server, put\nthe private key here in PEM format. The ACME client will\nlook up your account information with this key first before\ntrying to create a new one. You can use placeholders here,\nfor example if you have it in an environment variable."
+			},
+			"doc": "If you have an existing account with the ACME server, put\nthe private key here in PEM format. The ACME client will\nlook up your account information with this key first before\ntrying to create a new one. You can use placeholders here,\nfor example if you have it in an environment variable."
+		},
+		{
+			"key": "external_account",
+			"value": {
+				"type": "struct",
+				"type_name": "github.com/mholt/acmez/acme.EAB",
+				"struct_fields": [
+					{
+						"key": "key_id",
+						"value": {
+							"type": "string",
+							"doc": "\"The key identifier MUST be an ASCII string.\" §7.3.4"
+						},
+						"doc": "\"The key identifier MUST be an ASCII string.\" §7.3.4"
+					},
+					{
+						"key": "mac_key",
+						"value": {
+							"type": "string",
+							"doc": "\"The MAC key SHOULD be provided in base64url-encoded\nform, to maximize compatibility between non-ACME\nprovisioning systems and ACME clients.\" §7.3.4"
+						},
+						"doc": "\"The MAC key SHOULD be provided in base64url-encoded\nform, to maximize compatibility between non-ACME\nprovisioning systems and ACME clients.\" §7.3.4"
+					}
+				],
+				"doc": "If using an ACME CA that requires an external account\nbinding, specify the CA-provided credentials here.\n\n\nEAB (External Account Binding) contains information\nnecessary to bind or map an ACME account to some\nother account known by the CA.\n\nExternal account bindings are \"used to associate an\nACME account with an existing account in a non-ACME\nsystem, such as a CA customer database.\"\n\n\"To enable ACME account binding, the CA operating the\nACME server needs to provide the ACME client with a\nMAC key and a key identifier, using some mechanism\noutside of ACME.\" §7.3.4"
+			},
+			"doc": "If using an ACME CA that requires an external account\nbinding, specify the CA-provided credentials here.\n\n\nEAB (External Account Binding) contains information\nnecessary to bind or map an ACME account to some\nother account known by the CA.\n\nExternal account bindings are \"used to associate an\nACME account with an existing account in a non-ACME\nsystem, such as a CA customer database.\"\n\n\"To enable ACME account binding, the CA operating the\nACME server needs to provide the ACME client with a\nMAC key and a key identifier, using some mechanism\noutside of ACME.\" §7.3.4"
+		},
+		{
+			"key": "acme_timeout",
+			"value": {
+				"type": "int",
+				"type_name": "github.com/caddyserver/caddy/v2.Duration",
+				"doc": "Time to wait before timing out an ACME operation.\nDefault: 0 (no timeout)\n\n\nDuration can be an integer or a string. An integer is\ninterpreted as nanoseconds. If a string, it is a Go\ntime.Duration value such as `300ms`, `1.5h`, or `2h45m`;\nvalid units are `ns`, `us`/`µs`, `ms`, `s`, `m`, `h`, and `d`."
+			},
+			"doc": "Time to wait before timing out an ACME operation.\nDefault: 0 (no timeout)\n\n\nDuration can be an integer or a string. An integer is\ninterpreted as nanoseconds. If a string, it is a Go\ntime.Duration value such as `300ms`, `1.5h`, or `2h45m`;\nvalid units are `ns`, `us`/`µs`, `ms`, `s`, `m`, `h`, and `d`."
+		},
+		{
+			"key": "challenges",
+			"value": {
+				"type": "struct",
+				"type_name": "github.com/caddyserver/caddy/v2/modules/caddytls.ChallengesConfig",
+				"struct_fields": [
+					{
+						"key": "http",
+						"value": {
+							"type": "struct",
+							"type_name": "github.com/caddyserver/caddy/v2/modules/caddytls.HTTPChallengeConfig",
+							"struct_fields": [
+								{
+									"key": "disabled",
+									"value": {
+										"type": "bool",
+										"doc": "If true, the HTTP challenge will be disabled."
+									},
+									"doc": "If true, the HTTP challenge will be disabled."
+								},
+								{
+									"key": "alternate_port",
+									"value": {
+										"type": "int",
+										"doc": "An alternate port on which to service this\nchallenge. Note that the HTTP challenge port is\nhard-coded into the spec and cannot be changed,\nso you would have to forward packets from the\nstandard HTTP challenge port to this one."
+									},
+									"doc": "An alternate port on which to service this\nchallenge. Note that the HTTP challenge port is\nhard-coded into the spec and cannot be changed,\nso you would have to forward packets from the\nstandard HTTP challenge port to this one."
+								}
+							],
+							"doc": "HTTP configures the ACME HTTP challenge. This\nchallenge is enabled and used automatically\nand by default.\n\n\nHTTPChallengeConfig configures the ACME HTTP challenge."
+						},
+						"doc": "HTTP configures the ACME HTTP challenge. This\nchallenge is enabled and used automatically\nand by default.\n\n\nHTTPChallengeConfig configures the ACME HTTP challenge."
+					},
+					{
+						"key": "tls-alpn",
+						"value": {
+							"type": "struct",
+							"type_name": "github.com/caddyserver/caddy/v2/modules/caddytls.TLSALPNChallengeConfig",
+							"struct_fields": [
+								{
+									"key": "disabled",
+									"value": {
+										"type": "bool",
+										"doc": "If true, the TLS-ALPN challenge will be disabled."
+									},
+									"doc": "If true, the TLS-ALPN challenge will be disabled."
+								},
+								{
+									"key": "alternate_port",
+									"value": {
+										"type": "int",
+										"doc": "An alternate port on which to service this\nchallenge. Note that the TLS-ALPN challenge port\nis hard-coded into the spec and cannot be changed,\nso you would have to forward packets from the\nstandard TLS-ALPN challenge port to this one."
+									},
+									"doc": "An alternate port on which to service this\nchallenge. Note that the TLS-ALPN challenge port\nis hard-coded into the spec and cannot be changed,\nso you would have to forward packets from the\nstandard TLS-ALPN challenge port to this one."
+								}
+							],
+							"doc": "TLSALPN configures the ACME TLS-ALPN challenge.\nThis challenge is enabled and used automatically\nand by default.\n\n\nTLSALPNChallengeConfig configures the ACME TLS-ALPN challenge."
+						},
+						"doc": "TLSALPN configures the ACME TLS-ALPN challenge.\nThis challenge is enabled and used automatically\nand by default.\n\n\nTLSALPNChallengeConfig configures the ACME TLS-ALPN challenge."
+					},
+					{
+						"key": "dns",
+						"value": {
+							"type": "struct",
+							"type_name": "github.com/caddyserver/caddy/v2/modules/caddytls.DNSChallengeConfig",
+							"struct_fields": [
+								{
+									"key": "provider",
+									"value": {
+										"type": "module",
+										"doc": "The DNS provider module to use which will manage\nthe DNS records relevant to the ACME challenge.",
+										"module_namespace": "dns.providers",
+										"module_inline_key": "name"
+									},
+									"doc": "The DNS provider module to use which will manage\nthe DNS records relevant to the ACME challenge."
+								},
+								{
+									"key": "ttl",
+									"value": {
+										"type": "int",
+										"type_name": "github.com/caddyserver/caddy/v2.Duration",
+										"doc": "The TTL of the TXT record used for the DNS challenge.\n\n\nDuration can be an integer or a string. An integer is\ninterpreted as nanoseconds. If a string, it is a Go\ntime.Duration value such as `300ms`, `1.5h`, or `2h45m`;\nvalid units are `ns`, `us`/`µs`, `ms`, `s`, `m`, `h`, and `d`."
+									},
+									"doc": "The TTL of the TXT record used for the DNS challenge.\n\n\nDuration can be an integer or a string. An integer is\ninterpreted as nanoseconds. If a string, it is a Go\ntime.Duration value such as `300ms`, `1.5h`, or `2h45m`;\nvalid units are `ns`, `us`/`µs`, `ms`, `s`, `m`, `h`, and `d`."
+								},
+								{
+									"key": "propagation_timeout",
+									"value": {
+										"type": "int",
+										"type_name": "github.com/caddyserver/caddy/v2.Duration",
+										"doc": "How long to wait for DNS record to propagate.\n\n\nDuration can be an integer or a string. An integer is\ninterpreted as nanoseconds. If a string, it is a Go\ntime.Duration value such as `300ms`, `1.5h`, or `2h45m`;\nvalid units are `ns`, `us`/`µs`, `ms`, `s`, `m`, `h`, and `d`."
+									},
+									"doc": "How long to wait for DNS record to propagate.\n\n\nDuration can be an integer or a string. An integer is\ninterpreted as nanoseconds. If a string, it is a Go\ntime.Duration value such as `300ms`, `1.5h`, or `2h45m`;\nvalid units are `ns`, `us`/`µs`, `ms`, `s`, `m`, `h`, and `d`."
+								},
+								{
+									"key": "resolvers",
+									"value": {
+										"type": "array",
+										"elems": {
+											"type": "string",
+											"doc": "Custom DNS resolvers to prefer over system/built-in defaults.\nOften necessary to configure when using split-horizon DNS."
+										}
+									},
+									"doc": "Custom DNS resolvers to prefer over system/built-in defaults.\nOften necessary to configure when using split-horizon DNS."
+								}
+							],
+							"doc": "Configures the ACME DNS challenge. Because this\nchallenge typically requires credentials for\ninterfacing with a DNS provider, this challenge is\nnot enabled by default. This is the only challenge\ntype which does not require a direct connection\nto Caddy from an external server.\n\nNOTE: DNS providers are currently being upgraded,\nand this API is subject to change, but should be\nstabilized soon.\n\n\nDNSChallengeConfig configures the ACME DNS challenge.\n\nNOTE: This API is still experimental and is subject to change."
+						},
+						"doc": "Configures the ACME DNS challenge. Because this\nchallenge typically requires credentials for\ninterfacing with a DNS provider, this challenge is\nnot enabled by default. This is the only challenge\ntype which does not require a direct connection\nto Caddy from an external server.\n\nNOTE: DNS providers are currently being upgraded,\nand this API is subject to change, but should be\nstabilized soon.\n\n\nDNSChallengeConfig configures the ACME DNS challenge.\n\nNOTE: This API is still experimental and is subject to change."
+					},
+					{
+						"key": "bind_host",
+						"value": {
+							"type": "string",
+							"doc": "Optionally customize the host to which a listener\nis bound if required for solving a challenge."
+						},
+						"doc": "Optionally customize the host to which a listener\nis bound if required for solving a challenge."
+					}
+				],
+				"doc": "Configures the various ACME challenge types.\n\n\nChallengesConfig configures the ACME challenges."
+			},
+			"doc": "Configures the various ACME challenge types.\n\n\nChallengesConfig configures the ACME challenges."
+		},
+		{
+			"key": "trusted_roots_pem_files",
+			"value": {
+				"type": "array",
+				"elems": {
+					"type": "string",
+					"doc": "An array of files of CA certificates to accept when connecting to the\nACME CA. Generally, you should only use this if the ACME CA endpoint\nis internal or for development/testing purposes."
+				}
+			},
+			"doc": "An array of files of CA certificates to accept when connecting to the\nACME CA. Generally, you should only use this if the ACME CA endpoint\nis internal or for development/testing purposes."
+		},
+		{
+			"key": "preferred_chains",
+			"value": {
+				"type": "struct",
+				"type_name": "github.com/caddyserver/caddy/v2/modules/caddytls.ChainPreference",
+				"struct_fields": [
+					{
+						"key": "smallest",
+						"value": {
+							"type": "bool",
+							"doc": "Prefer chains with the fewest number of bytes."
+						},
+						"doc": "Prefer chains with the fewest number of bytes."
+					},
+					{
+						"key": "root_common_name",
+						"value": {
+							"type": "array",
+							"elems": {
+								"type": "string",
+								"doc": "Select first chain having a root with one of\nthese common names."
+							}
+						},
+						"doc": "Select first chain having a root with one of\nthese common names."
+					},
+					{
+						"key": "any_common_name",
+						"value": {
+							"type": "array",
+							"elems": {
+								"type": "string",
+								"doc": "Select first chain that has any issuer with one\nof these common names."
+							}
+						},
+						"doc": "Select first chain that has any issuer with one\nof these common names."
+					}
+				],
+				"doc": "Preferences for selecting alternate certificate chains, if offered\nby the CA. By default, the first offered chain will be selected.\nIf configured, the chains may be sorted and the first matching chain\nwill be selected.\n\n\nChainPreference describes the client's preferred certificate chain,\nuseful if the CA offers alternate chains. The first matching chain\nwill be selected."
+			},
+			"doc": "Preferences for selecting alternate certificate chains, if offered\nby the CA. By default, the first offered chain will be selected.\nIf configured, the chains may be sorted and the first matching chain\nwill be selected.\n\n\nChainPreference describes the client's preferred certificate chain,\nuseful if the CA offers alternate chains. The first matching chain\nwill be selected."
+		}
+	],
+	"doc": "ACMEIssuer manages certificates using the ACME protocol (RFC 8555).\n",
+	"module_inline_key": "module"
+}

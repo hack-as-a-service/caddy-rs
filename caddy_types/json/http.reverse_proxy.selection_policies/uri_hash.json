@@ -1,0 +1,1 @@
+{"type": "struct", "type_name": "github.com/caddyserver/caddy/v2/modules/caddyhttp/reverseproxy.URIHashSelection", "doc": "URIHashSelection is a policy that selects a\nhost by hashing the request URI.\n", "module_inline_key": "policy"}

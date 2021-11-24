@@ -1,0 +1,8 @@
+{
+	"type": "array",
+	"type_name": "github.com/caddyserver/caddy/v2/modules/caddyhttp.MatchHost",
+	"elems": {
+		"type": "string"
+	},
+	"doc": "MatchHost matches requests by the Host value (case-insensitive).\n\nWhen used in a top-level HTTP route,\n[qualifying domain names](/docs/automatic-https#hostname-requirements)\nmay trigger [automatic HTTPS](/docs/automatic-https), which automatically\nprovisions and renews certificates for you. Before doing this, you\nshould ensure that DNS records for these domains are properly configured,\nespecially A/AAAA pointed at your server.\n\nAutomatic HTTPS can be\n[customized or disabled](/docs/modules/http#servers/automatic_https).\n\nWildcards (`*`) may be used to represent exactly one label of the\nhostname, in accordance with RFC 1034 (because host matchers are also\nused for automatic HTTPS which influences TLS certificates). Thus,\na host of `*` matches hosts like `localhost` or `internal` but not\n`example.com`. To catch all hosts, omit the host matcher entirely.\n\nThe wildcard can be useful for matching all subdomains, for example:\n`*.example.com` matches `foo.example.com` but not `foo.bar.example.com`.\n\nDuplicate entries will return an error.\n"
+}

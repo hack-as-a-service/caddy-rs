@@ -1,0 +1,8 @@
+{
+	"type": "array",
+	"type_name": "github.com/caddyserver/caddy/v2/modules/caddytls.MatchServerName",
+	"elems": {
+		"type": "string"
+	},
+	"doc": "MatchServerName matches based on SNI. Names in\nthis list may use left-most-label wildcards,\nsimilar to wildcard certificates.\n"
+}

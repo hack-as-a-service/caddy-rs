@@ -1,0 +1,6 @@
+{
+	"type": "struct",
+	"type_name": "github.com/caddyserver/caddy/v2/modules/caddyhttp.tlsPlaceholderWrapper",
+	"doc": "tlsPlaceholderWrapper is a no-op listener wrapper that marks\nwhere the TLS listener should be in a chain of listener wrappers.\nIt should only be used if another listener wrapper must be placed\nin front of the TLS handshake.\n",
+	"module_inline_key": "wrapper"
+}

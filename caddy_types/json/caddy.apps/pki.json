@@ -1,0 +1,136 @@
+{
+	"type": "struct",
+	"type_name": "github.com/caddyserver/caddy/v2/modules/caddypki.PKI",
+	"struct_fields": [
+		{
+			"key": "certificate_authorities",
+			"value": {
+				"type": "map",
+				"map_keys": {
+					"type": "string"
+				},
+				"elems": {
+					"type": "struct",
+					"type_name": "github.com/caddyserver/caddy/v2/modules/caddypki.CA",
+					"struct_fields": [
+						{
+							"key": "name",
+							"value": {
+								"type": "string",
+								"doc": "The user-facing name of the certificate authority."
+							},
+							"doc": "The user-facing name of the certificate authority."
+						},
+						{
+							"key": "root_common_name",
+							"value": {
+								"type": "string",
+								"doc": "The name to put in the CommonName field of the\nroot certificate."
+							},
+							"doc": "The name to put in the CommonName field of the\nroot certificate."
+						},
+						{
+							"key": "intermediate_common_name",
+							"value": {
+								"type": "string",
+								"doc": "The name to put in the CommonName field of the\nintermediate certificates."
+							},
+							"doc": "The name to put in the CommonName field of the\nintermediate certificates."
+						},
+						{
+							"key": "install_trust",
+							"value": {
+								"type": "bool",
+								"doc": "Whether Caddy will attempt to install the CA's root\ninto the system trust store, as well as into Java\nand Mozilla Firefox trust stores. Default: true."
+							},
+							"doc": "Whether Caddy will attempt to install the CA's root\ninto the system trust store, as well as into Java\nand Mozilla Firefox trust stores. Default: true."
+						},
+						{
+							"key": "root",
+							"value": {
+								"type": "struct",
+								"type_name": "github.com/caddyserver/caddy/v2/modules/caddypki.KeyPair",
+								"struct_fields": [
+									{
+										"key": "certificate",
+										"value": {
+											"type": "string",
+											"doc": "The certificate. By default, this should be the path to\na PEM file unless format is something else."
+										},
+										"doc": "The certificate. By default, this should be the path to\na PEM file unless format is something else."
+									},
+									{
+										"key": "private_key",
+										"value": {
+											"type": "string",
+											"doc": "The private key. By default, this should be the path to\na PEM file unless format is something else."
+										},
+										"doc": "The private key. By default, this should be the path to\na PEM file unless format is something else."
+									},
+									{
+										"key": "format",
+										"value": {
+											"type": "string",
+											"doc": "The format in which the certificate and private\nkey are provided. Default: pem_file"
+										},
+										"doc": "The format in which the certificate and private\nkey are provided. Default: pem_file"
+									}
+								],
+								"doc": "The root certificate to use; if null, one will be generated.\n\n\nKeyPair represents a public-private key pair, where the\npublic key is also called a certificate."
+							},
+							"doc": "The root certificate to use; if null, one will be generated.\n\n\nKeyPair represents a public-private key pair, where the\npublic key is also called a certificate."
+						},
+						{
+							"key": "intermediate",
+							"value": {
+								"type": "struct",
+								"type_name": "github.com/caddyserver/caddy/v2/modules/caddypki.KeyPair",
+								"struct_fields": [
+									{
+										"key": "certificate",
+										"value": {
+											"type": "string",
+											"doc": "The certificate. By default, this should be the path to\na PEM file unless format is something else."
+										},
+										"doc": "The certificate. By default, this should be the path to\na PEM file unless format is something else."
+									},
+									{
+										"key": "private_key",
+										"value": {
+											"type": "string",
+											"doc": "The private key. By default, this should be the path to\na PEM file unless format is something else."
+										},
+										"doc": "The private key. By default, this should be the path to\na PEM file unless format is something else."
+									},
+									{
+										"key": "format",
+										"value": {
+											"type": "string",
+											"doc": "The format in which the certificate and private\nkey are provided. Default: pem_file"
+										},
+										"doc": "The format in which the certificate and private\nkey are provided. Default: pem_file"
+									}
+								],
+								"doc": "The intermediate (signing) certificate; if null, one will be generated.\n\n\nKeyPair represents a public-private key pair, where the\npublic key is also called a certificate."
+							},
+							"doc": "The intermediate (signing) certificate; if null, one will be generated.\n\n\nKeyPair represents a public-private key pair, where the\npublic key is also called a certificate."
+						},
+						{
+							"key": "storage",
+							"value": {
+								"type": "module",
+								"doc": "Optionally configure a separate storage module associated with this\nissuer, instead of using Caddy's global/default-configured storage.\nThis can be useful if you want to keep your signing keys in a\nseparate location from your leaf certificates.",
+								"module_namespace": "caddy.storage",
+								"module_inline_key": "module"
+							},
+							"doc": "Optionally configure a separate storage module associated with this\nissuer, instead of using Caddy's global/default-configured storage.\nThis can be useful if you want to keep your signing keys in a\nseparate location from your leaf certificates."
+						}
+					],
+					"doc": "The certificate authorities to manage. Each CA is keyed by an\nID that is used to uniquely identify it from other CAs.\nThe default CA ID is \"local\".\n\n\nCA describes a certificate authority, which consists of\nroot/signing certificates and various settings pertaining\nto the issuance of certificates and trusting them."
+				}
+			},
+			"doc": "The certificate authorities to manage. Each CA is keyed by an\nID that is used to uniquely identify it from other CAs.\nThe default CA ID is \"local\".\n\n\nCA describes a certificate authority, which consists of\nroot/signing certificates and various settings pertaining\nto the issuance of certificates and trusting them."
+		}
+	],
+	"doc": "PKI provides Public Key Infrastructure facilities for Caddy.\n\nThis app can define certificate authorities (CAs) which are capable\nof signing certificates. Other modules can be configured to use\nthe CAs defined by this app for issuing certificates or getting\nkey information needed for establishing trust.\n"
+}

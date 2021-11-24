@@ -1,0 +1,1 @@
+{"type": "struct", "type_name": "github.com/caddyserver/caddy/v2/modules/caddyhttp/encode/brotli.BrotliPrecompressed", "doc": "BrotliPrecompressed provides the file extension for files precompressed with brotli encoding.\n"}

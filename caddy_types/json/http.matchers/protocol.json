@@ -1,0 +1,5 @@
+{
+	"type": "string",
+	"type_name": "github.com/caddyserver/caddy/v2/modules/caddyhttp.MatchProtocol",
+	"doc": "MatchProtocol matches requests by protocol. Recognized values are\n\"http\", \"https\", and \"grpc\".\n"
+}

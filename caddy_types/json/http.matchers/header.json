@@ -1,0 +1,14 @@
+{
+	"type": "map",
+	"type_name": "github.com/caddyserver/caddy/v2/modules/caddyhttp.MatchHeader",
+	"map_keys": {
+		"type": "string"
+	},
+	"elems": {
+		"type": "array",
+		"elems": {
+			"type": "string"
+		}
+	},
+	"doc": "MatchHeader matches requests by header fields. The key is the field\nname and the array is the list of field values. It performs fast,\nexact string comparisons of the field values. Fast prefix, suffix,\nand substring matches can also be done by suffixing, prefixing, or\nsurrounding the value with the wildcard `*` character, respectively.\nIf a list is null, the header must not exist. If the list is empty,\nthe field must simply exist, regardless of its value.\n"
+}

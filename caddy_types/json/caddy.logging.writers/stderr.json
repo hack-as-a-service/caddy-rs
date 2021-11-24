@@ -1,0 +1,6 @@
+{
+	"type": "struct",
+	"type_name": "github.com/caddyserver/caddy/v2.StderrWriter",
+	"doc": "StderrWriter writes logs to standard error.\n",
+	"module_inline_key": "output"
+}

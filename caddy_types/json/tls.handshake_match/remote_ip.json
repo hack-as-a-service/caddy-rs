@@ -1,0 +1,29 @@
+{
+	"type": "struct",
+	"type_name": "github.com/caddyserver/caddy/v2/modules/caddytls.MatchRemoteIP",
+	"struct_fields": [
+		{
+			"key": "ranges",
+			"value": {
+				"type": "array",
+				"elems": {
+					"type": "string",
+					"doc": "The IPs or CIDR ranges to match."
+				}
+			},
+			"doc": "The IPs or CIDR ranges to match."
+		},
+		{
+			"key": "not_ranges",
+			"value": {
+				"type": "array",
+				"elems": {
+					"type": "string",
+					"doc": "The IPs or CIDR ranges to *NOT* match."
+				}
+			},
+			"doc": "The IPs or CIDR ranges to *NOT* match."
+		}
+	],
+	"doc": "MatchRemoteIP matches based on the remote IP of the\nconnection. Specific IPs or CIDR ranges can be specified.\n\nNote that IPs can sometimes be spoofed, so do not rely\non this as a replacement for actual authentication.\n"
+}

@@ -1,0 +1,26 @@
+{
+	"type": "struct",
+	"type_name": "github.com/caddyserver/caddy/v2/modules/caddyhttp.MatchRemoteIP",
+	"struct_fields": [
+		{
+			"key": "ranges",
+			"value": {
+				"type": "array",
+				"elems": {
+					"type": "string",
+					"doc": "The IPs or CIDR ranges to match."
+				}
+			},
+			"doc": "The IPs or CIDR ranges to match."
+		},
+		{
+			"key": "forwarded",
+			"value": {
+				"type": "bool",
+				"doc": "If true, prefer the first IP in the request's X-Forwarded-For\nheader, if present, rather than the immediate peer's IP, as\nthe reference IP against which to match. Note that it is easy\nto spoof request headers. Default: false"
+			},
+			"doc": "If true, prefer the first IP in the request's X-Forwarded-For\nheader, if present, rather than the immediate peer's IP, as\nthe reference IP against which to match. Note that it is easy\nto spoof request headers. Default: false"
+		}
+	],
+	"doc": "MatchRemoteIP matches requests by client IP (or CIDR range).\n"
+}

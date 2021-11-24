@@ -1,0 +1,1 @@
+{"type": "struct", "type_name": "github.com/caddyserver/caddy/v2/modules/caddyhttp/reverseproxy.RoundRobinSelection", "doc": "RoundRobinSelection is a policy that selects\na host based on round-robin ordering.\n", "module_inline_key": "policy"}

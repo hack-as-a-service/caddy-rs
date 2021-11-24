@@ -1,0 +1,11 @@
+{
+	"type": "array",
+	"type_name": "github.com/caddyserver/caddy/v2/modules/caddyhttp.MatchNot",
+	"elems": {
+		"type": "module_map",
+		"type_name": "github.com/caddyserver/caddy/v2.ModuleMap",
+		"doc": "ModuleMap is a map that can contain multiple modules,\nwhere the map key is the module's name. (The namespace\nis usually read from an associated field's struct tag.)\nBecause the module's name is given as the key in a\nmodule map, the name does not have to be given in the\njson.RawMessage.\n",
+		"module_namespace": "http.matchers"
+	},
+	"doc": "MatchNot matches requests by negating the results of its matcher\nsets. A single \"not\" matcher takes one or more matcher sets. Each\nmatcher set is OR'ed; in other words, if any matcher set returns\ntrue, the final result of the \"not\" matcher is false. Individual\nmatchers within a set work the same (i.e. different matchers in\nthe same set are AND'ed).\n\nNOTE: The generated docs which describe the structure of this\nmodule are wrong because of how this type unmarshals JSON in a\ncustom way. The correct structure is:\n\n```json\n[\n\t{},\n\t{}\n]\n```\n\nwhere each of the array elements is a matcher set, i.e. an\nobject keyed by matcher name.\n"
+}

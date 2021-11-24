@@ -1,0 +1,68 @@
+{
+	"type": "struct",
+	"type_name": "github.com/caddyserver/caddy/v2/modules/logging.JSONEncoder",
+	"struct_fields": [
+		{
+			"key": "message_key",
+			"value": {
+				"type": "string"
+			}
+		},
+		{
+			"key": "level_key",
+			"value": {
+				"type": "string"
+			}
+		},
+		{
+			"key": "time_key",
+			"value": {
+				"type": "string"
+			}
+		},
+		{
+			"key": "name_key",
+			"value": {
+				"type": "string"
+			}
+		},
+		{
+			"key": "caller_key",
+			"value": {
+				"type": "string"
+			}
+		},
+		{
+			"key": "stacktrace_key",
+			"value": {
+				"type": "string"
+			}
+		},
+		{
+			"key": "line_ending",
+			"value": {
+				"type": "string"
+			}
+		},
+		{
+			"key": "time_format",
+			"value": {
+				"type": "string"
+			}
+		},
+		{
+			"key": "duration_format",
+			"value": {
+				"type": "string"
+			}
+		},
+		{
+			"key": "level_format",
+			"value": {
+				"type": "string"
+			}
+		}
+	],
+	"doc": "JSONEncoder encodes entries as JSON.\n",
+	"module_inline_key": "format"
+}

@@ -1,0 +1,8 @@
+{
+	"type": "array",
+	"type_name": "github.com/caddyserver/caddy/v2/modules/caddyhttp.MatchPath",
+	"elems": {
+		"type": "string"
+	},
+	"doc": "MatchPath matches requests by the URI's path (case-insensitive). Path\nmatches are exact, but wildcards may be used:\n\n- At the end, for a prefix match (`/prefix/*`)\n- At the beginning, for a suffix match (`*.suffix`)\n- On both sides, for a substring match (`*/contains/*`)\n- In the middle, for a globular match (`/accounts/*/info`)\n\nThis matcher is fast, so it does not support regular expressions or\ncapture groups. For slower but more powerful matching, use the\npath_regexp matcher.\n"
+}

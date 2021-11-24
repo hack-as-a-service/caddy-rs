@@ -1,0 +1,33 @@
+{
+	"type": "struct",
+	"type_name": "github.com/caddyserver/caddy/v2/modules/caddytls.InternalIssuer",
+	"struct_fields": [
+		{
+			"key": "ca",
+			"value": {
+				"type": "string",
+				"doc": "The ID of the CA to use for signing. The default\nCA ID is \"local\". The CA can be configured with the\n`pki` app."
+			},
+			"doc": "The ID of the CA to use for signing. The default\nCA ID is \"local\". The CA can be configured with the\n`pki` app."
+		},
+		{
+			"key": "lifetime",
+			"value": {
+				"type": "int",
+				"type_name": "github.com/caddyserver/caddy/v2.Duration",
+				"doc": "The validity period of certificates.\n\n\nDuration can be an integer or a string. An integer is\ninterpreted as nanoseconds. If a string, it is a Go\ntime.Duration value such as `300ms`, `1.5h`, or `2h45m`;\nvalid units are `ns`, `us`/`µs`, `ms`, `s`, `m`, `h`, and `d`."
+			},
+			"doc": "The validity period of certificates.\n\n\nDuration can be an integer or a string. An integer is\ninterpreted as nanoseconds. If a string, it is a Go\ntime.Duration value such as `300ms`, `1.5h`, or `2h45m`;\nvalid units are `ns`, `us`/`µs`, `ms`, `s`, `m`, `h`, and `d`."
+		},
+		{
+			"key": "sign_with_root",
+			"value": {
+				"type": "bool",
+				"doc": "If true, the root will be the issuer instead of\nthe intermediate. This is NOT recommended and should\nonly be used when devices/clients do not properly\nvalidate certificate chains."
+			},
+			"doc": "If true, the root will be the issuer instead of\nthe intermediate. This is NOT recommended and should\nonly be used when devices/clients do not properly\nvalidate certificate chains."
+		}
+	],
+	"doc": "InternalIssuer is a certificate issuer that generates\ncertificates internally using a locally-configured\nCA which can be customized using the `pki` app.\n",
+	"module_inline_key": "module"
+}

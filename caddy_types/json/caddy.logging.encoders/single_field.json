@@ -1,0 +1,22 @@
+{
+	"type": "struct",
+	"type_name": "github.com/caddyserver/caddy/v2/modules/logging.SingleFieldEncoder",
+	"struct_fields": [
+		{
+			"key": "field",
+			"value": {
+				"type": "string"
+			}
+		},
+		{
+			"key": "fallback",
+			"value": {
+				"type": "module",
+				"module_namespace": "caddy.logging.encoders",
+				"module_inline_key": "format"
+			}
+		}
+	],
+	"doc": "SingleFieldEncoder writes a log entry that consists entirely\nof a single string field in the log entry. This is useful\nfor custom, self-encoded log entries that consist of a\nsingle field in the structured log entry.\n",
+	"module_inline_key": "format"
+}

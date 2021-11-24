@@ -1,0 +1,25 @@
+{
+	"type": "struct",
+	"type_name": "github.com/caddyserver/caddy/v2/modules/logging.NetWriter",
+	"struct_fields": [
+		{
+			"key": "address",
+			"value": {
+				"type": "string",
+				"doc": "The address of the network socket to which to connect."
+			},
+			"doc": "The address of the network socket to which to connect."
+		},
+		{
+			"key": "dial_timeout",
+			"value": {
+				"type": "int",
+				"type_name": "github.com/caddyserver/caddy/v2.Duration",
+				"doc": "The timeout to wait while connecting to the socket.\n\n\nDuration can be an integer or a string. An integer is\ninterpreted as nanoseconds. If a string, it is a Go\ntime.Duration value such as `300ms`, `1.5h`, or `2h45m`;\nvalid units are `ns`, `us`/`µs`, `ms`, `s`, `m`, `h`, and `d`."
+			},
+			"doc": "The timeout to wait while connecting to the socket.\n\n\nDuration can be an integer or a string. An integer is\ninterpreted as nanoseconds. If a string, it is a Go\ntime.Duration value such as `300ms`, `1.5h`, or `2h45m`;\nvalid units are `ns`, `us`/`µs`, `ms`, `s`, `m`, `h`, and `d`."
+		}
+	],
+	"doc": "NetWriter implements a log writer that outputs to a network socket. If\nthe socket goes down, it will dump logs to stderr while it attempts to\nreconnect.\n",
+	"module_inline_key": "output"
+}

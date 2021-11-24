@@ -1,0 +1,1 @@
+{"type": "struct", "type_name": "github.com/caddyserver/caddy/v2/modules/caddyhttp/caddyauth.BcryptHash", "doc": "BcryptHash implements the bcrypt hash.\n", "module_inline_key": "algorithm"}

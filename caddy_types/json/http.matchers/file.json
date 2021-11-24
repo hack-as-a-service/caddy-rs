@@ -1,0 +1,45 @@
+{
+	"type": "struct",
+	"type_name": "github.com/caddyserver/caddy/v2/modules/caddyhttp/fileserver.MatchFile",
+	"struct_fields": [
+		{
+			"key": "root",
+			"value": {
+				"type": "string",
+				"doc": "The root directory, used for creating absolute\nfile paths, and required when working with\nrelative paths; if not specified, `{http.vars.root}`\nwill be used, if set; otherwise, the current\ndirectory is assumed. Accepts placeholders."
+			},
+			"doc": "The root directory, used for creating absolute\nfile paths, and required when working with\nrelative paths; if not specified, `{http.vars.root}`\nwill be used, if set; otherwise, the current\ndirectory is assumed. Accepts placeholders."
+		},
+		{
+			"key": "try_files",
+			"value": {
+				"type": "array",
+				"elems": {
+					"type": "string",
+					"doc": "The list of files to try. Each path here is\nconsidered related to Root. If nil, the request\nURL's path will be assumed. Files and\ndirectories are treated distinctly, so to match\na directory, the filepath MUST end in a forward\nslash `/`. To match a regular file, there must\nbe no trailing slash. Accepts placeholders."
+				}
+			},
+			"doc": "The list of files to try. Each path here is\nconsidered related to Root. If nil, the request\nURL's path will be assumed. Files and\ndirectories are treated distinctly, so to match\na directory, the filepath MUST end in a forward\nslash `/`. To match a regular file, there must\nbe no trailing slash. Accepts placeholders."
+		},
+		{
+			"key": "try_policy",
+			"value": {
+				"type": "string",
+				"doc": "How to choose a file in TryFiles. Can be:\n\n- first_exist\n- smallest_size\n- largest_size\n- most_recently_modified\n\nDefault is first_exist."
+			},
+			"doc": "How to choose a file in TryFiles. Can be:\n\n- first_exist\n- smallest_size\n- largest_size\n- most_recently_modified\n\nDefault is first_exist."
+		},
+		{
+			"key": "split_path",
+			"value": {
+				"type": "array",
+				"elems": {
+					"type": "string",
+					"doc": "A list of delimiters to use to split the path in two\nwhen trying files. If empty, no splitting will\noccur, and the path will be tried as-is. For each\nsplit value, the left-hand side of the split,\nincluding the split value, will be the path tried.\nFor example, the path `/remote.php/dav/` using the\nsplit value `.php` would try the file `/remote.php`.\nEach delimiter must appear at the end of a URI path\ncomponent in order to be used as a split delimiter."
+				}
+			},
+			"doc": "A list of delimiters to use to split the path in two\nwhen trying files. If empty, no splitting will\noccur, and the path will be tried as-is. For each\nsplit value, the left-hand side of the split,\nincluding the split value, will be the path tried.\nFor example, the path `/remote.php/dav/` using the\nsplit value `.php` would try the file `/remote.php`.\nEach delimiter must appear at the end of a URI path\ncomponent in order to be used as a split delimiter."
+		}
+	],
+	"doc": "MatchFile is an HTTP request matcher that can match\nrequests based upon file existence.\n\nUpon matching, three new placeholders will be made\navailable:\n\n- `{http.matchers.file.relative}` The root-relative\npath of the file. This is often useful when rewriting\nrequests.\n- `{http.matchers.file.absolute}` The absolute path\nof the matched file.\n- `{http.matchers.file.type}` Set to \"directory\" if\nthe matched file is a directory, \"file\" otherwise.\n- `{http.matchers.file.remainder}` Set to the remainder\nof the path if the path was split by `split_path`.\n"
+}

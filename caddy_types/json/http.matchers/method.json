@@ -1,0 +1,8 @@
+{
+	"type": "array",
+	"type_name": "github.com/caddyserver/caddy/v2/modules/caddyhttp.MatchMethod",
+	"elems": {
+		"type": "string"
+	},
+	"doc": "MatchMethod matches requests by the method.\n"
+}

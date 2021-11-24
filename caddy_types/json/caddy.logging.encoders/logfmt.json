@@ -1,0 +1,68 @@
+{
+	"type": "struct",
+	"type_name": "github.com/caddyserver/caddy/v2/modules/logging.LogfmtEncoder",
+	"struct_fields": [
+		{
+			"key": "message_key",
+			"value": {
+				"type": "string"
+			}
+		},
+		{
+			"key": "level_key",
+			"value": {
+				"type": "string"
+			}
+		},
+		{
+			"key": "time_key",
+			"value": {
+				"type": "string"
+			}
+		},
+		{
+			"key": "name_key",
+			"value": {
+				"type": "string"
+			}
+		},
+		{
+			"key": "caller_key",
+			"value": {
+				"type": "string"
+			}
+		},
+		{
+			"key": "stacktrace_key",
+			"value": {
+				"type": "string"
+			}
+		},
+		{
+			"key": "line_ending",
+			"value": {
+				"type": "string"
+			}
+		},
+		{
+			"key": "time_format",
+			"value": {
+				"type": "string"
+			}
+		},
+		{
+			"key": "duration_format",
+			"value": {
+				"type": "string"
+			}
+		},
+		{
+			"key": "level_format",
+			"value": {
+				"type": "string"
+			}
+		}
+	],
+	"doc": "LogfmtEncoder encodes log entries as logfmt:\nhttps://www.brandur.org/logfmt\n\nNote that logfmt does not encode nested structures\nproperly, so it is not a good fit for most logs.\n\n⚠️ DEPRECATED. Do not use. It will eventually be removed\nfrom the standard Caddy modules. For more information,\nsee https://github.com/caddyserver/caddy/issues/3575.\n",
+	"module_inline_key": "format"
+}

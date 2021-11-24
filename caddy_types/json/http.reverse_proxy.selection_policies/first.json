@@ -1,0 +1,1 @@
+{"type": "struct", "type_name": "github.com/caddyserver/caddy/v2/modules/caddyhttp/reverseproxy.FirstSelection", "doc": "FirstSelection is a policy that selects\nthe first available host.\n", "module_inline_key": "policy"}

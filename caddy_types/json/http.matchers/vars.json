@@ -1,0 +1,11 @@
+{
+	"type": "map",
+	"type_name": "github.com/caddyserver/caddy/v2/modules/caddyhttp.VarsMatcher",
+	"map_keys": {
+		"type": "string"
+	},
+	"elems": {
+		"type": "string"
+	},
+	"doc": "VarsMatcher is an HTTP request matcher which can match\nrequests based on variables in the context.\n"
+}
