@@ -131,7 +131,7 @@ caddy_types_codegen::caddy_types!("json/root.json" => {
 });
 
 /// Support for [Caddy's @id field](https://caddyserver.com/docs/api#using-id-in-json).
-#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Debug, serde::Serialize, serde::Deserialize)]
 pub struct Identified<T> {
 	#[serde(rename = "@id")]
 	#[serde(skip_serializing_if = "Option::is_none")]

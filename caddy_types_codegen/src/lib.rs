@@ -367,7 +367,7 @@ fn mk_struct_def(
 	(
 		quote! {
 			#doc
-			#[derive(::serde::Serialize, ::serde::Deserialize)]
+			#[derive(Debug, ::serde::Serialize, ::serde::Deserialize)]
 			#[serde(rename_all = "snake_case")]
 			pub struct #ty_name_lit #block
 		},
@@ -518,7 +518,7 @@ fn mk_module_def(
 		.expect("mk_module_def: expected inline tag value");
 	(
 		quote! {
-			#[derive(::serde::Serialize, ::serde::Deserialize)]
+			#[derive(Debug, ::serde::Serialize, ::serde::Deserialize)]
 			#[serde(rename_all = "snake_case")]
 			#[serde(tag = #tag)]
 			pub enum #ty_name_lit {
