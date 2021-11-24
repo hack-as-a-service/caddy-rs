@@ -196,9 +196,9 @@ fn mk_type(
 			// )
 			let q = quote! { crate::#ty_name_lit };
 			if boxed {
-				quote! { ::std::boxed::Box<#q> }
+				quote! { crate::Identified<::std::boxed::Box<#q>> }
 			} else {
-				q
+				quote! { crate::Identified<#q> }
 			}
 		}
 		Bool => quote! { bool },
@@ -326,7 +326,7 @@ fn mk_struct_block(
 						#field_docs
 						#field_attrs
 						#[serde(skip_serializing_if = "Option::is_none")]
-						pub #field_names: ::std::option::Option<crate::Identified<#field_tys>>
+						pub #field_names: ::std::option::Option<#field_tys>
 					),*
 				}
 			},
