@@ -19,15 +19,12 @@ fn joining_path(u: &Url, path: &[&str]) -> Url {
 	let new_path = u
 		.path_segments()
 		.unwrap()
-		.chain(path.into_iter().copied())
+		.chain(path.iter().copied())
 		.collect::<Vec<_>>()
 		.join("/");
-	let url = {
-		let mut u2 = u.clone();
-		u2.set_path(&new_path);
-		u2
-	};
-	url
+	let mut u2 = u.clone();
+	u2.set_path(&new_path);
+	u2
 }
 
 /// A Caddy client using a specified API base.
