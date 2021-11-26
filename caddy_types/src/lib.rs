@@ -24,16 +24,18 @@ caddy_types_codegen::caddy_types!("json/root.json" => {
 	},
 	"caddy.logging.encoders" => format (module) {
 		console => "json/caddy.logging.encoders/console.json",
-		/* FIXME: filter excluded since it uses a special format that we can't properly type */
+		// FIXME: filter excluded since it uses a special format that we can't properly type
 		// filter => "json/caddy.logging.encoders/filter.json",
 		json => "json/caddy.logging.encoders/json.json",
 		logfmt => "json/caddy.logging.encoders/logfmt.json",
 		single_field => "json/caddy.logging.encoders/single_field.json"
-		/* formatted excluded - not part of main Caddy repo - https://caddyserver.com/api/docs/config/logging/logs/encoder/formatted */
+		// formatted excluded - not part of main Caddy repo
+		// https://caddyserver.com/api/docs/config/logging/logs/encoder/formatted
 	},
 	"caddy.listeners" => wrapper (module) {
 		tls => "json/caddy.listeners/tls.json"
-		/* proxy_protocol excluded - not part of main Caddy repo - https://caddyserver.com/api/docs/config/apps/http/servers/listener_wrappers/proxy_protocol */
+		// proxy_protocol excluded - not part of main Caddy repo
+		// https://caddyserver.com/api/docs/config/apps/http/servers/listener_wrappers/proxy_protocol
 	},
 	"tls.issuance" => module (module) {
 		acme => "json/tls.issuance/acme.json",
@@ -41,7 +43,8 @@ caddy_types_codegen::caddy_types!("json/root.json" => {
 		zerossl => "json/tls.issuance/zerossl.json"
 	},
 	"dns.providers" => name (module) {
-		/* empty - none of the dns providers are part of main Caddy repo - https://caddyserver.com/api/docs/config/admin/identity/issuers/acme/challenges/dns/provider */
+		// Empty - none of the dns providers are part of main Caddy repo
+		// https://caddyserver.com/api/docs/config/admin/identity/issuers/acme/challenges/dns/provider
 	},
 	"http.matchers" => (module_map) {
 		// NOTE: changed type of this to string to align with docs
@@ -100,7 +103,7 @@ caddy_types_codegen::caddy_types!("json/root.json" => {
 		fastcgi => "json/http.reverse_proxy.transport/fastcgi.json"
 	},
 	"http.reverse_proxy.circuit_breakers" => r#type (module) {
-		/* No built in ones */
+		// No built-in ones
 	},
 	"http.reverse_proxy.selection_policies" => policy (module) {
 		cookie => "json/http.reverse_proxy.selection_policies/cookie.json",

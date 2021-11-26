@@ -38,7 +38,7 @@ enum ConfigTypeValueInner {
 		elems: Box<ConfigTypeValue>,
 	},
 	Module {
-		/* NB: Type name for modules is derived from the module namespace, since it's an enum */
+		// NB: Type name for modules is derived from the module namespace, since it's an enum
 		module_namespace: String,
 	},
 	ModuleMap {
@@ -120,7 +120,7 @@ fn mk_type_name(config: &ConfigTypeValueInner) -> Cow<str> {
 		ModuleMap {
 			module_namespace, ..
 		} => mk_module_map_ty_name(module_namespace).into(),
-		/* Primitive types, Vecs, HashMaps */
+		// Primitive types, Vecs, HashMaps
 		_ => panic!("mk_type_name got config without type name!"),
 	}
 }
@@ -129,7 +129,7 @@ fn mk_type_name(config: &ConfigTypeValueInner) -> Cow<str> {
 fn mk_type(config: &ConfigTypeValueInner, boxed: bool) -> TokenStream {
 	use ConfigTypeValueInner::*;
 	match config {
-		/* big int? */
+		// big int?
 		Struct { type_name, .. } if type_name.to_lowercase().ends_with("bigint") => quote! { i64 },
 		Struct { .. } | Module { .. } | ModuleMap { .. } => {
 			let ty_name = mk_type_name(config);
@@ -182,7 +182,7 @@ fn mk_struct_block(config: &ConfigTypeValue, ty_names_set: &mut HashSet<String>)
 				false
 			};
 			let ty = mk_type(&field.value.value, is_boxed);
-			// Fixes reserved keywords as field names
+			// Fixes reserved keywords as field names, and dashes in field names
 			use heck::SnakeCase;
 			let snake_key = field.key.to_snake_case();
 			let field_key = &field.key;
@@ -197,7 +197,7 @@ fn mk_struct_block(config: &ConfigTypeValue, ty_names_set: &mut HashSet<String>)
 				quote! { #[doc = #field_doc] }
 			});
 		}
-		/* Prune empty modules */
+		// Prune empty modules
 		let aux_collected = aux.into_iter().fold(quote! {}, |acc, x| quote! { #acc #x });
 		(
 			quote! {
@@ -229,7 +229,7 @@ fn mk_struct_def(
 		.unwrap_or_else(|| mk_type_name(&config.value));
 	let ty_name_lit = quote::format_ident!("{}", ty_name);
 	let ty_name_lit = quote! { #ty_name_lit };
-	/* Prune empty docs */
+	// Prune empty docs
 	let doc = config.doc.as_deref().unwrap_or("");
 	let doc = if doc.is_empty() {
 		quote! {}
@@ -251,7 +251,7 @@ fn mk_struct_def(
 fn mk_def(config: &ConfigTypeValue, ty_names_set: &mut HashSet<String>) -> Generated {
 	use ConfigTypeValueInner::*;
 	match &config.value {
-		/* Special cased in mk_ty */
+		// Special cased in mk_ty
 		Struct { type_name, .. } if type_name.to_lowercase().ends_with("bigint") => {
 			(quote! {}, quote! {})
 		}
@@ -259,18 +259,18 @@ fn mk_def(config: &ConfigTypeValue, ty_names_set: &mut HashSet<String>) -> Gener
 			let ty_name = mk_type_name(&config.value);
 			let has_ty = ty_names_set.contains(&*ty_name);
 			if has_ty {
-				/* Don't repeat definitions */
+				// Don't repeat definitions
 				(quote! {}, quote! {})
 			} else {
 				ty_names_set.insert(ty_name.to_string());
 				mk_struct_def(config, None, ty_names_set)
 			}
 		}
-		/* Modules and module maps should be defined by top level, which don't use this function to generate definitions */
+		// Modules and module maps should be defined by top level, which don't use this function to generate definitions
 		Module { .. } | ModuleMap { .. } => (quote! {}, quote! {}),
-		/* Primitive types don't need defs (std) */
+		// Primitive types don't need defs (already defined in std)
 		Bool | String | Int | Float => (quote! {}, quote! {}),
-		/* Arrays / maps need definitions of their inner types (which goes in aux) */
+		// Arrays / maps need definitions of their inner types (which goes in aux)
 		Array { elems } => {
 			let (inner_def, inner_aux) = mk_def(elems, ty_names_set);
 			(quote! {}, quote! { #inner_def #inner_aux })
@@ -314,7 +314,7 @@ fn mk_module_aux(
 ) -> Generated {
 	let name_fixed = mk_module_map_ty_name(name);
 	let config = ConfigTypeValue {
-		/* Modules don't have docs (for now), FIXME */
+		// FIXME: Modules don't have docs
 		doc: None,
 		value: ConfigTypeValueInner::Struct {
 			type_name: name_fixed,
@@ -341,14 +341,14 @@ fn mk_module_def(
 	let ty_name = mk_module_ty_name(name);
 	let ty_name_lit = quote::format_ident!("{}", ty_name);
 	let ty_name_lit = quote! { #ty_name_lit };
-	/* We don't need the struct, just the aux definitions */
+	// We don't need the struct, just the aux definitions
 	let (_, aux) = mk_module_aux(name, values, ty_names_set);
 	let mut variants = Vec::new();
 	for (field_name, field_config) in &values.values {
 		let camel_case_field_name = field_name.to_camel_case();
 		let camel_case_field_name_lit = quote::format_ident!("{}", camel_case_field_name);
 		let camel_case_field_name_lit = quote! { #camel_case_field_name_lit };
-		/* Use type as inner value */
+		// Use type as inner value
 		let field_ty = mk_type(&field_config.value, false);
 		variants.push(quote! {
 			#camel_case_field_name_lit(#field_ty)
@@ -377,7 +377,7 @@ fn mk_module_map_def(
 	values: &NamespaceDef,
 	ty_names_set: &mut HashSet<String>,
 ) -> Generated {
-	/* This function uses both outputs, not just the aux */
+	// This function uses both outputs, not just the aux
 	mk_module_aux(name, values, ty_names_set)
 }
 
@@ -398,7 +398,7 @@ fn mk_toplevel(
 		if value.defn_types.module() {
 			let (module_def, module_def_aux) = mk_module_def(name, value, &mut ty_names_set);
 			module_defs.push(module_def);
-			/* If we are generating a module map as well, the aux definitions are already there */
+			// If we are generating a module map as well, the aux definitions are already there
 			if !value.defn_types.module_map() {
 				module_defs_aux.push(module_def_aux);
 			}
