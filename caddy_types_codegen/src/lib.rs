@@ -10,21 +10,21 @@ use serde::Deserialize;
 
 // MARK: Codegen
 
-#[derive(Debug, Deserialize)]
-struct ConfigStructure {
-	status_code: usize,
-	result: ConfigStructure2,
-}
+// #[derive(Debug, Deserialize)]
+// struct ConfigStructure {
+// 	// status_code: usize,
+// 	// result: ConfigStructure2,
+// }
 
-type Namespaces = HashMap<String, Vec<NamespaceStructure>>;
+// type Namespaces = HashMap<String, Vec<NamespaceStructure>>;
 
-#[derive(Debug, Deserialize)]
-struct ConfigStructure2 {
-	structure: ConfigTypeValue,
-	namespaces: Namespaces,
-	breadcrumb: HashMap<String, ConfigTypeValue>,
-	repo: String,
-}
+// #[derive(Debug, Deserialize)]
+// struct ConfigStructure2 {
+// 	structure: ConfigTypeValue,
+// 	namespaces: Namespaces,
+// 	breadcrumb: HashMap<String, ConfigTypeValue>,
+// 	repo: String,
+// }
 
 #[derive(Debug, Deserialize, Clone)]
 struct ConfigTypeValue {
@@ -59,10 +59,10 @@ enum ConfigTypeValueInner {
 	Module {
 		/* NB: Type name for modules is derived from the module namespace, since it's an enum */
 		module_namespace: String,
-		module_inline_key: String,
+		// module_inline_key: String,
 	},
 	ModuleMap {
-		type_name: String,
+		// type_name: String,
 		module_namespace: String,
 	},
 }
@@ -71,13 +71,13 @@ fn default_type_name() -> String {
 	"CaddyConfig".to_owned()
 }
 
-#[derive(Debug, Deserialize)]
-struct NamespaceStructure {
-	name: String,
-	docs: Option<String>,
-	package: String,
-	repo: String,
-}
+// #[derive(Debug, Deserialize)]
+// struct NamespaceStructure {
+// 	name: String,
+// 	docs: Option<String>,
+// 	package: String,
+// 	repo: String,
+// }
 
 #[derive(Debug, Deserialize, Clone)]
 struct KeyValuePair {
@@ -90,7 +90,7 @@ type Generated = (TokenStream, TokenStream);
 
 fn clean_up_go_type_name_path(path: &str) -> Cow<str> {
 	// FIXME: make try expression once stabilized
-	let tmp_path = (move || Some(path.split("/").last()?.split(".").last()?))().unwrap_or(path);
+	let tmp_path = (move || path.split('/').last()?.split('.').last())().unwrap_or(path);
 	if tmp_path == "Handler" {
 		// heuristic: merge together dots and try again
 		clean_up_go_type_name_path(&path.replace(".", ""))
@@ -137,7 +137,7 @@ fn fixup_module_namespace2(module_namespace: &str) -> &str {
 /// Generate a module (type) name from the given namespace name
 fn mk_module_ty_name(namespace: &str) -> String {
 	use heck::CamelCase;
-	fixup_module_namespace(&namespace)
+	fixup_module_namespace(namespace)
 		.replace(".", "_")
 		.to_camel_case()
 }
@@ -147,7 +147,7 @@ fn mk_module_map_ty_name(namespace: &str) -> String {
 	use heck::CamelCase;
 	format!(
 		"{}_map",
-		fixup_module_namespace(&namespace).replace(".", "_")
+		fixup_module_namespace(namespace).replace(".", "_")
 	)
 	.to_camel_case()
 }
@@ -157,23 +157,23 @@ fn mk_module_map_ty_name(namespace: &str) -> String {
 fn mk_type_name(config: &ConfigTypeValueInner) -> Cow<str> {
 	use ConfigTypeValueInner::*;
 	match config {
-		Struct { type_name, .. } => clean_up_go_type_name_path(type_name).into(),
+		Struct { type_name, .. } => clean_up_go_type_name_path(type_name),
 		Module {
 			module_namespace, ..
-		} => mk_module_ty_name(&module_namespace).into(),
+		} => mk_module_ty_name(module_namespace).into(),
 		ModuleMap {
 			module_namespace, ..
-		} => mk_module_map_ty_name(&module_namespace).into(),
+		} => mk_module_map_ty_name(module_namespace).into(),
 		/* Primitive types, Vecs, HashMaps */
 		_ => panic!("mk_type_name got config without type name!"),
 	}
 }
 
 /// Generate a module name from a type name
-fn mk_module_name(ty_name: &str) -> String {
-	use heck::SnakeCase;
-	ty_name.to_snake_case()
-}
+// fn mk_module_name(ty_name: &str) -> String {
+// 	use heck::SnakeCase;
+// 	ty_name.to_snake_case()
+// }
 
 /// Generate a type from the given config
 fn mk_type(
@@ -221,7 +221,7 @@ fn mk_type(
 /// Invariant assumed that the passed config is a struct config
 fn mk_struct_block(
 	config: &ConfigTypeValue,
-	mod_name: Option<&str>,
+	// mod_name: Option<&str>,
 	ty_names_set: &mut HashSet<String>,
 ) -> Generated {
 	use ConfigTypeValueInner::*;
@@ -231,9 +231,9 @@ fn mk_struct_block(
 		let mut field_attrs = vec![];
 		let mut field_tys = vec![];
 		let mut field_docs = vec![];
-		let mod_name_lit = mod_name
-			.map(|n| quote::format_ident!("{}", n))
-			.map(|i| quote! { #i });
+		// let mod_name_lit = mod_name
+		// 	.map(|n| quote::format_ident!("{}", n))
+		// 	.map(|i| quote! { #i });
 		for field in struct_fields {
 			// let should_insert_defs = if matches!(&field.value.value, Struct { .. }) {
 			// 	let ty_name = mk_type_name(&field.value.value);
@@ -257,12 +257,13 @@ fn mk_struct_block(
 				let ty_name1 = mk_type_name(&config.value);
 				let ty_name2 = mk_type_name(&field.value.value);
 				// eprintln!("{} {}", ty_name1, ty_name2);
-				if ty_name1 == "SingleFieldEncoder" && ty_name2 == "CaddyLoggingEncoders" {
-					// eprintln!("Boxing");
-					true
-				} else {
-					false
-				}
+				ty_name1 == "SingleFieldEncoder" && ty_name2 == "CaddyLoggingEncoders"
+			// if ty_name1 == "SingleFieldEncoder" && ty_name2 == "CaddyLoggingEncoders" {
+			// 	// eprintln!("Boxing");
+			// 	true
+			// } else {
+			// 	false
+			// }
 			} else {
 				false
 			};
@@ -342,7 +343,7 @@ fn mk_struct_block(
 fn mk_struct_def(
 	config: &ConfigTypeValue,
 	rename_ty: Option<&str>,
-	mod_name: Option<&str>,
+	// mod_name: Option<&str>,
 	ty_names_set: &mut HashSet<String>,
 ) -> Generated {
 	// let original_ty_name = mk_type_name(&config.value);
@@ -360,7 +361,7 @@ fn mk_struct_def(
 	};
 	let (block, aux) = mk_struct_block(
 		config,
-		mod_name.or(Some(&mk_module_name(&ty_name))),
+		// mod_name.or_else(|| Some(&mk_module_name(&ty_name))), // mod_name.or(Some(&mk_module_name(&ty_name))),
 		ty_names_set,
 	);
 	//let has_ty = false; //ty_names_set.insert(ty_name.to_string());
@@ -390,7 +391,7 @@ fn mk_def(config: &ConfigTypeValue, ty_names_set: &mut HashSet<String>) -> Gener
 				(quote! {}, quote! {})
 			} else {
 				ty_names_set.insert(ty_name.to_string());
-				mk_struct_def(config, None, None, ty_names_set)
+				mk_struct_def(config, None, ty_names_set)
 			}
 		}
 		/* Modules and module maps should be defined by top level, which don't use this function to generate definitions */
@@ -399,17 +400,18 @@ fn mk_def(config: &ConfigTypeValue, ty_names_set: &mut HashSet<String>) -> Gener
 		Bool | String | Int | Float => (quote! {}, quote! {}),
 		/* Arrays / maps need definitions of their inner types (which goes in aux) */
 		Array { elems } => {
-			let (inner_def, inner_aux) = mk_def(&elems, ty_names_set);
+			let (inner_def, inner_aux) = mk_def(elems, ty_names_set);
 			(quote! {}, quote! { #inner_def #inner_aux })
 		}
 		Map { map_keys, elems } => {
-			let (keys_def, keys_aux) = mk_def(&map_keys, ty_names_set);
-			let (val_def, val_aux) = mk_def(&elems, ty_names_set);
+			let (keys_def, keys_aux) = mk_def(map_keys, ty_names_set);
+			let (val_def, val_aux) = mk_def(elems, ty_names_set);
 			(quote! {}, quote! { #keys_def #keys_aux #val_def #val_aux })
 		}
 	}
 }
 
+#[allow(clippy::enum_variant_names)]
 enum NamespaceDefTypes {
 	Module,
 	ModuleMap,
@@ -456,8 +458,8 @@ fn mk_module_aux(
 		},
 	};
 	/* rename the module using the passed name */
-	let mod_name = mk_module_name(&mk_module_ty_name(name));
-	mk_struct_def(&config, None, Some(&mod_name), ty_names_set)
+	// let mod_name = mk_module_name(&mk_module_ty_name(name));
+	mk_struct_def(&config, None, ty_names_set)
 }
 
 /// Create an actual module definition (enum)
@@ -470,9 +472,9 @@ fn mk_module_def(
 	let ty_name = mk_module_ty_name(name);
 	let ty_name_lit = quote::format_ident!("{}", ty_name);
 	let ty_name_lit = quote! { #ty_name_lit };
-	let mod_name = mk_module_name(&ty_name);
-	let mod_name_lit = quote::format_ident!("{}", mod_name);
-	let mod_name_lit = quote! { #mod_name_lit };
+	// let mod_name = mk_module_name(&ty_name);
+	// let mod_name_lit = quote::format_ident!("{}", mod_name);
+	// let mod_name_lit = quote! { #mod_name_lit };
 	/* We don't need the struct, just the aux definitions */
 	let (_, aux) = mk_module_aux(name, values, ty_names_set);
 	let mut variants = Vec::new();
@@ -544,17 +546,17 @@ fn mk_toplevel(
 	namespace_defs: &HashMap<String, NamespaceDef>,
 ) -> TokenStream {
 	let mut ty_names_set = HashSet::new();
-	let (struct_def, struct_defs_aux) = mk_struct_def(&structure, None, None, &mut ty_names_set);
+	let (struct_def, struct_defs_aux) = mk_struct_def(structure, None, &mut ty_names_set);
 	let mut module_defs = vec![];
 	let mut module_defs_aux = vec![];
 	for (name, value) in namespace_defs {
 		if value.defn_types.module_map() {
-			let (map_def, map_def_aux) = mk_module_map_def(&name, value, &mut ty_names_set);
+			let (map_def, map_def_aux) = mk_module_map_def(name, value, &mut ty_names_set);
 			module_defs.push(map_def);
 			module_defs_aux.push(map_def_aux);
 		}
 		if value.defn_types.module() {
-			let (module_def, module_def_aux) = mk_module_def(&name, value, &mut ty_names_set);
+			let (module_def, module_def_aux) = mk_module_def(name, value, &mut ty_names_set);
 			module_defs.push(module_def);
 			/* If we are generating a module map as well, the aux definitions are already there */
 			if !value.defn_types.module_map() {
@@ -689,7 +691,7 @@ impl Parse for NamespaceDef2 {
 }
 
 impl NamespaceDef2 {
-	fn to_def(self) -> Result<NamespaceDef, SynError> {
+	fn into_def(self) -> Result<NamespaceDef, SynError> {
 		let mut values = HashMap::new();
 		for (k, v) in self.values {
 			values.insert(k.to_string(), v.read_config()?);
@@ -741,11 +743,11 @@ impl Parse for CaddyTypesInput {
 }
 
 impl CaddyTypesInput {
-	fn to_structure(self) -> Result<(ConfigTypeValue, HashMap<String, NamespaceDef>), SynError> {
+	fn into_structure(self) -> Result<(ConfigTypeValue, HashMap<String, NamespaceDef>), SynError> {
 		let root_config = self.root.read_config()?;
 		let mut namespaces = HashMap::new();
 		for (k, v) in self.namespaces.into_iter() {
-			namespaces.insert(k, v.to_def()?);
+			namespaces.insert(k, v.into_def()?);
 		}
 		Ok((root_config, namespaces))
 	}
@@ -753,9 +755,9 @@ impl CaddyTypesInput {
 
 #[proc_macro]
 pub fn caddy_types(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
-	let input2 = input.clone();
-	let input_parsed = syn::parse_macro_input!(input2 as CaddyTypesInput);
-	let (cfg, namespaces) = match input_parsed.to_structure() {
+	// let input2 = input.clone();
+	let input_parsed = syn::parse_macro_input!(input as CaddyTypesInput);
+	let (cfg, namespaces) = match input_parsed.into_structure() {
 		Ok(s) => s,
 		/* Errors have already been printed / spanned */
 		Err(e) => return e.into_compile_error().into(),
