@@ -15,5 +15,5 @@ thiserror = "1.0.30"
 members = [
 	"caddy_types/",
 	"caddy_types_codegen/",
-	"caddy_test/"
+	"caddy_test/",
 ]
