@@ -6,7 +6,6 @@
     flake-utils.url = "github:numtide/flake-utils";
     fenix = {
       url = "github:nix-community/fenix";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
@@ -23,7 +22,7 @@
             "rust-src"
             "rustfmt"
           ])
-          #fenixPkgs.rust-analyzer
+          fenixPkgs.rust-analyzer
           cargo-edit
           cargo-expand
           libiconv
