@@ -100,8 +100,8 @@ impl CaddyClient {
 		}
 	}
 
-	/// Sets the snippet of Caddy configuration at the given path.
-	pub async fn set_config<Q: Serialize>(&self, path: &[&str], config: &Q) -> Result<()> {
+	/// Adds the snippet of Caddy configuration at the given path.
+	pub async fn add_config<Q: Serialize>(&self, path: &[&str], config: &Q) -> Result<()> {
 		let _ = self
 			.client
 			.post(joining_path(
