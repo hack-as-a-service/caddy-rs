@@ -68,17 +68,18 @@ impl CaddyClient {
 
 	/// Gets the snippet of Caddy configuration at the given path.
 	pub async fn get_config<Q: DeserializeOwned>(&self, path: &[&str]) -> Result<Q> {
-		Ok(self
-			.client
-			.get(joining_path(
-				&joining_path(&self.api_base, &["config"]),
-				path,
-			))
-			.send()
-			.await?
-			.error_for_status()?
-			.json()
-			.await?)
+		Ok(response_error_for_status(
+			self.client
+				.get(joining_path(
+					&joining_path(&self.api_base, &["config"]),
+					path,
+				))
+				.send()
+				.await?,
+		)
+		.await??
+		.json()
+		.await?)
 	}
 
 	/// Gets the snippet of Caddy configuration referred to by the given ID.
@@ -102,68 +103,73 @@ impl CaddyClient {
 
 	/// Adds the snippet of Caddy configuration at the given path.
 	pub async fn add_config<Q: Serialize>(&self, path: &[&str], config: &Q) -> Result<()> {
-		let _ = self
-			.client
-			.post(joining_path(
-				&joining_path(&self.api_base, &["config"]),
-				path,
-			))
-			.json(config)
-			.send()
-			.await?
-			.error_for_status()?;
+		let _ = response_error_for_status(
+			self.client
+				.post(joining_path(
+					&joining_path(&self.api_base, &["config"]),
+					path,
+				))
+				.json(config)
+				.send()
+				.await?,
+		)
+		.await??;
 		Ok(())
 	}
 
 	/// Puts the snippet of Caddy configuration at the given path.
 	pub async fn put_config<Q: Serialize>(&self, path: &[&str], config: &Q) -> Result<()> {
-		let _ = self
-			.client
-			.put(joining_path(
-				&joining_path(&self.api_base, &["config"]),
-				path,
-			))
-			.json(config)
-			.send()
-			.await?
-			.error_for_status()?;
+		let _ = response_error_for_status(
+			self.client
+				.put(joining_path(
+					&joining_path(&self.api_base, &["config"]),
+					path,
+				))
+				.json(config)
+				.send()
+				.await?,
+		)
+		.await??;
 		Ok(())
 	}
 
 	/// Deletes the snippet of Caddy configuration at the given path.
 	pub async fn delete_config(&self, path: &[&str]) -> Result<()> {
-		let _ = self
-			.client
-			.delete(joining_path(
-				&joining_path(&self.api_base, &["config"]),
-				path,
-			))
-			.send()
-			.await?
-			.error_for_status()?;
+		let _ = response_error_for_status(
+			self.client
+				.delete(joining_path(
+					&joining_path(&self.api_base, &["config"]),
+					path,
+				))
+				.send()
+				.await?,
+		)
+		.await??;
 		Ok(())
 	}
 
 	/// Stops the Caddy server gracefully and exits the process.
 	pub async fn stop(&self) -> Result<()> {
-		let _ = self
-			.client
-			.post(joining_path(&self.api_base, &["stop"]))
-			.send()
-			.await?
-			.error_for_status()?;
+		let _ = response_error_for_status(
+			self.client
+				.post(joining_path(&self.api_base, &["stop"]))
+				.send()
+				.await?,
+		)
+		.await??;
 		Ok(())
 	}
 
 	/// Loads a new Caddy configuration; if the load fails, the old configuration stays running with no downtime.
 	pub async fn load<Q: Serialize>(&self, config: &Q) -> Result<()> {
-		let _ = self
-			.client
-			.post(joining_path(&self.api_base, &["load"]))
-			.json(config)
-			.send()
-			.await?
-			.error_for_status()?;
+		let _ = response_error_for_status(
+			self.client
+				.post(joining_path(&self.api_base, &["load"]))
+				.json(config)
+				.send()
+				.await?,
+		)
+		.await??;
 		Ok(())
 	}
 }
