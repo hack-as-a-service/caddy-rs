@@ -133,6 +133,22 @@ impl CaddyClient {
 		Ok(())
 	}
 
+	/// Patches the snippet of Caddy configuration at the given path.
+	pub async fn patch_config<Q: Serialize>(&self, path: &[&str], config: &Q) -> Result<()> {
+		let _ = response_error_for_status(
+			self.client
+				.patch(joining_path(
+					&joining_path(&self.api_base, &["config"]),
+					path,
+				))
+				.json(config)
+				.send()
+				.await?,
+		)
+		.await??;
+		Ok(())
+	}
+
 	/// Deletes the snippet of Caddy configuration at the given path.
 	pub async fn delete_config(&self, path: &[&str]) -> Result<()> {
 		let _ = response_error_for_status(
