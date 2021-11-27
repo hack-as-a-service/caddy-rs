@@ -8,7 +8,7 @@ edition = "2021"
 [dependencies]
 caddy_types = { path = "./caddy_types" }
 reqwest = { version = "0.11.6", features = ["json"] }
-serde = "1.0.130"
+serde = { version = "1.0.130", features = ["derive"] }
 thiserror = "1.0.30"
 
 [workspace]

@@ -11,6 +11,8 @@ pub enum CaddyError {
 	CannotBeABase,
 	#[error("Reqwest error: {0}")]
 	Reqwest(#[from] reqwest::Error),
+	#[error("Caddy error: {0}")]
+	Caddy(String),
 }
 
 pub type Result<T> = std::result::Result<T, CaddyError>;
@@ -25,6 +27,28 @@ fn joining_path(u: &Url, path: &[&str]) -> Url {
 	let mut u2 = u.clone();
 	u2.set_path(&new_path);
 	u2
+}
+
+#[derive(serde::Serialize, serde::Deserialize)]
+struct CaddyErrorJSON {
+	error: String,
+}
+
+impl From<CaddyErrorJSON> for CaddyError {
+	fn from(e: CaddyErrorJSON) -> Self {
+		Self::Caddy(e.error)
+	}
+}
+
+async fn response_error_for_status(
+	r: reqwest::Response,
+) -> Result<std::result::Result<reqwest::Response, CaddyErrorJSON>> {
+	if r.status().is_client_error() || r.status().is_server_error() {
+		let e = r.json().await?;
+		Ok(Err(e))
+	} else {
+		Ok(Ok(r))
+	}
 }
 
 /// A Caddy client using a specified API base.
@@ -55,6 +79,25 @@ impl CaddyClient {
 			.error_for_status()?
 			.json()
 			.await?)
+	}
+
+	/// Gets the snippet of Caddy configuration referred to by the given ID.
+	pub async fn get_id_config<Q: DeserializeOwned>(&self, id: &str) -> Result<Option<Q>> {
+		let r = self
+			.client
+			.get(joining_path(&self.api_base, &["id", id]))
+			.send()
+			.await?;
+		match response_error_for_status(r).await? {
+			Ok(r) => Ok(Some(r.json().await?)),
+			Err(e) => {
+				if e.error.starts_with("unknown object ID") {
+					Ok(None)
+				} else {
+					Err(e.into())
+				}
+			}
+		}
 	}
 
 	/// Sets the snippet of Caddy configuration at the given path.
