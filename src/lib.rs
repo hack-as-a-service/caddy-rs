@@ -40,14 +40,23 @@ impl From<CaddyErrorJSON> for CaddyError {
 	}
 }
 
-async fn response_error_for_status(
-	r: reqwest::Response,
-) -> Result<std::result::Result<reqwest::Response, CaddyErrorJSON>> {
+async fn make_request_handling_errors<Q: Serialize>(
+	u: Url,
+	c: &Client,
+	m: reqwest::Method,
+	j: Option<&Q>,
+) -> Result<reqwest::Response> {
+	let mut rb = c.request(m, u);
+	if let Some(j) = j {
+		rb = rb.json(j);
+	}
+	let r = rb.send().await?;
 	if r.status().is_client_error() || r.status().is_server_error() {
-		let e = r.json().await?;
-		Ok(Err(e))
+		// Response contains a caddy error
+		let e = r.json::<CaddyErrorJSON>().await?;
+		Err(e.into())
 	} else {
-		Ok(Ok(r))
+		Ok(r)
 	}
 }
 
@@ -66,126 +75,132 @@ impl CaddyClient {
 		Ok(Self { api_base, client })
 	}
 
-	/// Gets the snippet of Caddy configuration at the given path.
-	pub async fn get_config<Q: DeserializeOwned>(&self, path: &[&str]) -> Result<Q> {
-		Ok(response_error_for_status(
-			self.client
-				.get(joining_path(
-					&joining_path(&self.api_base, &["config"]),
-					path,
-				))
-				.send()
-				.await?,
-		)
-		.await??
-		.json()
-		.await?)
+	/// Creates a handle to the root Caddy configuration.
+	pub fn config_root(&self) -> ConfigHandle {
+		let new_url = joining_path(&self.api_base, &["config"]);
+		ConfigHandle::new(new_url, &self.client)
 	}
 
-	/// Gets the snippet of Caddy configuration referred to by the given ID.
-	pub async fn get_id_config<Q: DeserializeOwned>(&self, id: &str) -> Result<Option<Q>> {
-		let r = self
-			.client
-			.get(joining_path(&self.api_base, &["id", id]))
-			.send()
-			.await?;
-		match response_error_for_status(r).await? {
-			Ok(r) => Ok(Some(r.json().await?)),
-			Err(e) => {
-				if e.error.starts_with("unknown object ID") {
-					Ok(None)
-				} else {
-					Err(e.into())
-				}
-			}
-		}
+	/// Creates a handle to the snippet of Caddy configuration at the given path.
+	pub fn config_by_path(&self, path: &[&str]) -> ConfigHandle {
+		let new_url = joining_path(
+			&self.api_base,
+			["config"]
+				.iter()
+				.copied()
+				.chain(path.iter().copied())
+				.collect::<Vec<_>>()
+				.as_slice(),
+		);
+		ConfigHandle::new(new_url, &self.client)
 	}
 
-	/// Adds the snippet of Caddy configuration at the given path.
-	pub async fn add_config<Q: Serialize>(&self, path: &[&str], config: &Q) -> Result<()> {
-		let _ = response_error_for_status(
-			self.client
-				.post(joining_path(
-					&joining_path(&self.api_base, &["config"]),
-					path,
-				))
-				.json(config)
-				.send()
-				.await?,
-		)
-		.await??;
-		Ok(())
-	}
-
-	/// Puts the snippet of Caddy configuration at the given path.
-	pub async fn put_config<Q: Serialize>(&self, path: &[&str], config: &Q) -> Result<()> {
-		let _ = response_error_for_status(
-			self.client
-				.put(joining_path(
-					&joining_path(&self.api_base, &["config"]),
-					path,
-				))
-				.json(config)
-				.send()
-				.await?,
-		)
-		.await??;
-		Ok(())
-	}
-
-	/// Patches the snippet of Caddy configuration at the given path.
-	pub async fn patch_config<Q: Serialize>(&self, path: &[&str], config: &Q) -> Result<()> {
-		let _ = response_error_for_status(
-			self.client
-				.patch(joining_path(
-					&joining_path(&self.api_base, &["config"]),
-					path,
-				))
-				.json(config)
-				.send()
-				.await?,
-		)
-		.await??;
-		Ok(())
-	}
-
-	/// Deletes the snippet of Caddy configuration at the given path.
-	pub async fn delete_config(&self, path: &[&str]) -> Result<()> {
-		let _ = response_error_for_status(
-			self.client
-				.delete(joining_path(
-					&joining_path(&self.api_base, &["config"]),
-					path,
-				))
-				.send()
-				.await?,
-		)
-		.await??;
-		Ok(())
+	/// Creates a handle to the snippet of Caddy configuration referred to by the given id.
+	pub fn config_by_id(&self, id: &str) -> ConfigHandle {
+		let new_url = joining_path(&self.api_base, &["id", id]);
+		ConfigHandle::new(new_url, &self.client)
 	}
 
 	/// Stops the Caddy server gracefully and exits the process.
-	pub async fn stop(&self) -> Result<()> {
-		let _ = response_error_for_status(
-			self.client
-				.post(joining_path(&self.api_base, &["stop"]))
-				.send()
-				.await?,
-		)
-		.await??;
+	pub async fn stop(self) -> Result<()> {
+		let u = joining_path(&self.api_base, &["stop"]);
+		let _ = make_request_handling_errors::<()>(u, &self.client, reqwest::Method::POST, None)
+			.await?;
 		Ok(())
 	}
 
 	/// Loads a new Caddy configuration; if the load fails, the old configuration stays running with no downtime.
 	pub async fn load<Q: Serialize>(&self, config: &Q) -> Result<()> {
-		let _ = response_error_for_status(
-			self.client
-				.post(joining_path(&self.api_base, &["load"]))
-				.json(config)
-				.send()
-				.await?,
+		let u = joining_path(&self.api_base, &["load"]);
+		let _ =
+			make_request_handling_errors::<Q>(u, &self.client, reqwest::Method::POST, Some(config))
+				.await?;
+		Ok(())
+	}
+}
+
+/// A handle to a snippet of Caddy configuration, from a specific client.
+pub struct ConfigHandle<'a> {
+	url: Url,
+	client: &'a Client,
+}
+
+impl<'a> ConfigHandle<'a> {
+	fn new(url: Url, client: &'a Client) -> Self {
+		Self { url, client }
+	}
+
+	/// Gets the snippet of Caddy configuration referred to by this handle, if any.
+	pub async fn get<Q: DeserializeOwned>(&self) -> Result<Option<Q>> {
+		let r = match make_request_handling_errors::<()>(
+			self.url.clone(),
+			self.client,
+			reqwest::Method::GET,
+			None,
 		)
-		.await??;
+		.await
+		{
+			Ok(r) => r,
+			Err(e) => {
+				if let CaddyError::Caddy(ref s) = e {
+					if s.starts_with("unknown identifier") {
+						return Ok(None);
+					} else {
+						return Err(e);
+					}
+				} else {
+					return Err(e);
+				}
+			}
+		};
+		Ok(Some(r.json().await?))
+	}
+
+	/// POSTs the snippet of Caddy configuration referred to by this handle.
+	pub async fn post<Q: Serialize>(&self, config: &Q) -> Result<()> {
+		let _ = make_request_handling_errors::<Q>(
+			self.url.clone(),
+			self.client,
+			reqwest::Method::POST,
+			Some(config),
+		)
+		.await?;
+		Ok(())
+	}
+
+	/// PUTs the snippet of Caddy configuration referred to by this handle.
+	pub async fn put<Q: Serialize>(&self, config: &Q) -> Result<()> {
+		let _ = make_request_handling_errors::<Q>(
+			self.url.clone(),
+			self.client,
+			reqwest::Method::PUT,
+			Some(config),
+		)
+		.await?;
+		Ok(())
+	}
+
+	/// PATCHes the snippet of Caddy configuration referred to by this handle.
+	pub async fn patch<Q: Serialize>(&self, config: &Q) -> Result<()> {
+		let _ = make_request_handling_errors::<Q>(
+			self.url.clone(),
+			self.client,
+			reqwest::Method::PATCH,
+			Some(config),
+		)
+		.await?;
+		Ok(())
+	}
+
+	/// Deletes the snippet of Caddy configuration referred to by this handle.
+	pub async fn delete<Q: Serialize>(self, config: &Q) -> Result<()> {
+		let _ = make_request_handling_errors::<Q>(
+			self.url,
+			self.client,
+			reqwest::Method::DELETE,
+			Some(config),
+		)
+		.await?;
 		Ok(())
 	}
 }
