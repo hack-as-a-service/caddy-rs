@@ -41,22 +41,22 @@ impl From<CaddyErrorJSON> for CaddyError {
 }
 
 async fn make_request_handling_errors<Q: Serialize>(
-	u: Url,
-	c: &Client,
-	m: reqwest::Method,
-	j: Option<&Q>,
+	url: Url,
+	client: &Client,
+	method: reqwest::Method,
+	body: Option<&Q>,
 ) -> Result<reqwest::Response> {
-	let mut rb = c.request(m, u);
-	if let Some(j) = j {
-		rb = rb.json(j);
+	let mut builder = client.request(method, url);
+	if let Some(body) = body {
+		builder = builder.json(body);
 	}
-	let r = rb.send().await?;
-	if r.status().is_client_error() || r.status().is_server_error() {
+	let response = builder.send().await?;
+	if response.status().is_client_error() || response.status().is_server_error() {
 		// Response contains a caddy error
-		let e = r.json::<CaddyErrorJSON>().await?;
-		Err(e.into())
+		let err = response.json::<CaddyErrorJSON>().await?;
+		Err(err.into())
 	} else {
-		Ok(r)
+		Ok(response)
 	}
 }
 
@@ -103,18 +103,22 @@ impl CaddyClient {
 
 	/// Stops the Caddy server gracefully and exits the process.
 	pub async fn stop(self) -> Result<()> {
-		let u = joining_path(&self.api_base, &["stop"]);
-		let _ = make_request_handling_errors::<()>(u, &self.client, reqwest::Method::POST, None)
+		let url = joining_path(&self.api_base, &["stop"]);
+		let _ = make_request_handling_errors::<()>(url, &self.client, reqwest::Method::POST, None)
 			.await?;
 		Ok(())
 	}
 
 	/// Loads a new Caddy configuration; if the load fails, the old configuration stays running with no downtime.
 	pub async fn load<Q: Serialize>(&self, config: &Q) -> Result<()> {
-		let u = joining_path(&self.api_base, &["load"]);
-		let _ =
-			make_request_handling_errors::<Q>(u, &self.client, reqwest::Method::POST, Some(config))
-				.await?;
+		let url = joining_path(&self.api_base, &["load"]);
+		let _ = make_request_handling_errors::<Q>(
+			url,
+			&self.client,
+			reqwest::Method::POST,
+			Some(config),
+		)
+		.await?;
 		Ok(())
 	}
 }
@@ -132,7 +136,7 @@ impl<'a> ConfigHandle<'a> {
 
 	/// Gets the snippet of Caddy configuration referred to by this handle, if any.
 	pub async fn get<Q: DeserializeOwned>(&self) -> Result<Option<Q>> {
-		let r = match make_request_handling_errors::<()>(
+		let response = match make_request_handling_errors::<()>(
 			self.url.clone(),
 			self.client,
 			reqwest::Method::GET,
@@ -141,19 +145,19 @@ impl<'a> ConfigHandle<'a> {
 		.await
 		{
 			Ok(r) => r,
-			Err(e) => {
-				if let CaddyError::Caddy(ref s) = e {
+			Err(err) => {
+				if let CaddyError::Caddy(ref s) = err {
 					if s.starts_with("unknown identifier") {
 						return Ok(None);
 					} else {
-						return Err(e);
+						return Err(err);
 					}
 				} else {
-					return Err(e);
+					return Err(err);
 				}
 			}
 		};
-		Ok(Some(r.json().await?))
+		Ok(Some(response.json().await?))
 	}
 
 	/// POSTs the snippet of Caddy configuration referred to by this handle.
