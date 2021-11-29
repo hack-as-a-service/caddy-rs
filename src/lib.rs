@@ -29,7 +29,7 @@ fn joining_path(u: &Url, path: &[&str]) -> Url {
 	u2
 }
 
-#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Debug, serde::Serialize, serde::Deserialize)]
 struct CaddyErrorJSON {
 	error: String,
 }
@@ -61,6 +61,7 @@ async fn make_request_handling_errors<Q: Serialize>(
 }
 
 /// A Caddy client using a specified API base.
+#[derive(Debug, Clone)]
 pub struct CaddyClient {
 	api_base: Url,
 	client: Client,
@@ -124,6 +125,7 @@ impl CaddyClient {
 }
 
 /// A handle to a snippet of Caddy configuration, from a specific client.
+#[derive(Debug, Clone)]
 pub struct ConfigHandle<'a> {
 	url: Url,
 	client: &'a Client,
