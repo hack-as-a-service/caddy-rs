@@ -134,6 +134,14 @@ impl<'a> ConfigHandle<'a> {
 		Self { url, client }
 	}
 
+	/// Appends path components to this handle.
+	pub fn appending_path(self, path: &[&str]) -> Self {
+		Self {
+			url: joining_path(&self.url, path),
+			client: self.client,
+		}
+	}
+
 	/// Gets the snippet of Caddy configuration referred to by this handle, if any.
 	pub async fn get<Q: DeserializeOwned>(&self) -> Result<Option<Q>> {
 		let response = match make_request_handling_errors::<()>(
