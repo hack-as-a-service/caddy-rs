@@ -135,30 +135,23 @@ caddy_types_codegen::caddy_types!("json/root.json" => {
 
 /// Support for [Caddy's @id field](https://caddyserver.com/docs/api#using-id-in-json).
 #[derive(Debug, serde::Serialize, serde::Deserialize)]
-#[serde(untagged)]
-pub enum Identifiable<T> {
-	Identified { id: String, value: T },
-	Unidentified(T),
+pub struct Identified<T> {
+	#[serde(rename = "@id")]
+	#[serde(skip_serializing_if = "Option::is_none")]
+	pub id: Option<String>,
+	#[serde(flatten)]
+	pub value: T,
 }
 
-impl<T: Default> Default for Identifiable<T> {
-	fn default() -> Self {
-		Self::Unidentified(T::default())
-	}
-}
-
-impl<T> From<T> for Identifiable<T> {
+impl<T> From<T> for Identified<T> {
 	fn from(value: T) -> Self {
-		Self::Unidentified(value)
+		Self { id: None, value }
 	}
 }
 
-impl<T> std::ops::Deref for Identifiable<T> {
+impl<T> std::ops::Deref for Identified<T> {
 	type Target = T;
 	fn deref(&self) -> &Self::Target {
-		match self {
-			Self::Identified { value, .. } => value,
-			Self::Unidentified(value) => value,
-		}
+		&self.value
 	}
 }
